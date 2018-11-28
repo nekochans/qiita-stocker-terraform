@@ -12,13 +12,13 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${terraform.workspace}-igw"
+    Name = "${terraform.workspace}_igw"
   }
 }
 
 resource "aws_eip" "nat_ip_1a" {
   tags {
-    Name = "${terraform.workspace}-nat-1a"
+    Name = "${terraform.workspace}_nat_1a"
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_subnet" "public_1a" {
   availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}a"
 
   tags {
-    Name = "${terraform.workspace}-public-1a"
+    Name = "${terraform.workspace}_public_1a"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_subnet" "public_1c" {
   availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}c"
 
   tags {
-    Name = "${terraform.workspace}-public-1c"
+    Name = "${terraform.workspace}_public_1c"
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_subnet" "public_1d" {
   availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}d"
 
   tags {
-    Name = "${terraform.workspace}-public-1d"
+    Name = "${terraform.workspace}_public_1d"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_subnet" "private_1a" {
   availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}a"
 
   tags {
-    Name = "${terraform.workspace}-private-1a"
+    Name = "${terraform.workspace}_private_1a"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_subnet" "private_1c" {
   availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}c"
 
   tags {
-    Name = "${terraform.workspace}-private-1c"
+    Name = "${terraform.workspace}_private_1c"
   }
 }
 
@@ -78,7 +78,7 @@ resource "aws_subnet" "private_1d" {
   availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}d"
 
   tags {
-    Name = "${terraform.workspace}-private-1d"
+    Name = "${terraform.workspace}_private_1d"
   }
 }
 
@@ -87,7 +87,7 @@ resource "aws_nat_gateway" "nat_1a" {
   subnet_id     = "${aws_subnet.public_1a.id}"
 
   tags {
-    Name = "${terraform.workspace}-1a"
+    Name = "${terraform.workspace}_1a"
   }
 }
 
@@ -100,7 +100,7 @@ resource "aws_route_table" "public" {
   }
 
   tags {
-    Name = "${terraform.workspace}-public-rt"
+    Name = "${terraform.workspace}_public_rt"
   }
 }
 
@@ -114,7 +114,7 @@ resource "aws_route_table" "private" {
   }
 
   tags {
-    Name = "${terraform.workspace}-private-rt"
+    Name = "${terraform.workspace}_private_rt"
   }
 }
 
