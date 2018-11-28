@@ -1,15 +1,10 @@
-variable "common" {
-  type = "map"
-
-  default = {
-    default.region = "ap-northeast-1"
-  }
-}
-
 variable "vpc" {
   type = "map"
 
   default = {
+    default.az_1a      = "ap-northeast-1a"
+    default.az_1c      = "ap-northeast-1c"
+    default.az_1d      = "ap-northeast-1d"
     default.name       = "prod_qiita_stocker_vpc"
     stg.name           = "stg_qiita_stocker_vpc"
     default.cidr       = "10.1.0.0/16"

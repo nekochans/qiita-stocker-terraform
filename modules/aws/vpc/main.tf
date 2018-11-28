@@ -25,7 +25,7 @@ resource "aws_eip" "nat_ip_1a" {
 resource "aws_subnet" "public_1a" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${lookup(var.vpc, "${terraform.env}.public_1a", var.vpc["default.public_1a"])}"
-  availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}a"
+  availability_zone = "${lookup(var.vpc, "default.az_1a")}"
 
   tags {
     Name = "${terraform.workspace}_public_1a"
@@ -35,7 +35,7 @@ resource "aws_subnet" "public_1a" {
 resource "aws_subnet" "public_1c" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${lookup(var.vpc, "${terraform.env}.public_1c", var.vpc["default.public_1c"])}"
-  availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}c"
+  availability_zone = "${lookup(var.vpc, "default.az_1c")}"
 
   tags {
     Name = "${terraform.workspace}_public_1c"
@@ -45,7 +45,7 @@ resource "aws_subnet" "public_1c" {
 resource "aws_subnet" "public_1d" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${lookup(var.vpc, "${terraform.env}.public_1d", var.vpc["default.public_1d"])}"
-  availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}d"
+  availability_zone = "${lookup(var.vpc, "default.az_1d")}"
 
   tags {
     Name = "${terraform.workspace}_public_1d"
@@ -55,7 +55,7 @@ resource "aws_subnet" "public_1d" {
 resource "aws_subnet" "private_1a" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${lookup(var.vpc, "${terraform.env}.private_1a", var.vpc["default.private_1a"])}"
-  availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}a"
+  availability_zone = "${lookup(var.vpc, "default.az_1a")}"
 
   tags {
     Name = "${terraform.workspace}_private_1a"
@@ -65,7 +65,7 @@ resource "aws_subnet" "private_1a" {
 resource "aws_subnet" "private_1c" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${lookup(var.vpc, "${terraform.env}.private_1c", var.vpc["default.private_1c"])}"
-  availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}c"
+  availability_zone = "${lookup(var.vpc, "default.az_1c")}"
 
   tags {
     Name = "${terraform.workspace}_private_1c"
@@ -75,7 +75,7 @@ resource "aws_subnet" "private_1c" {
 resource "aws_subnet" "private_1d" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${lookup(var.vpc, "${terraform.env}.private_1d", var.vpc["default.private_1d"])}"
-  availability_zone = "${lookup(var.common, "${terraform.env}.region", var.common["default.region"])}d"
+  availability_zone = "${lookup(var.vpc, "default.az_1d")}"
 
   tags {
     Name = "${terraform.workspace}_private_1d"
