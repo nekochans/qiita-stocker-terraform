@@ -19,3 +19,5 @@ crash.log
 # IDEA Setting File
 .idea
 qiita-stocker-terraform.iml
+
+providers/aws/environments/20-bastion/terraform.tfvars
