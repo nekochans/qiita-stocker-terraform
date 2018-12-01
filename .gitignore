@@ -20,4 +20,4 @@ crash.log
 .idea
 qiita-stocker-terraform.iml
 
-providers/aws/environments/20-bastion/variable.tf
+providers/aws/environments/20-bastion/terraform.tfvars
