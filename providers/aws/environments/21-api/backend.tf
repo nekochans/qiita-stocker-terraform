@@ -20,7 +20,7 @@ data "terraform_remote_state" "network" {
   }
 }
 
-data "terraform_remote_state" "backend" {
+data "terraform_remote_state" "bastion" {
   backend = "s3"
 
   config {
