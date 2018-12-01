@@ -1,3 +1,3 @@
-output "bastion_security_id" {
-  value = "${module.bastion.bastion_security_id}"
+output "bastion" {
+  value = "${module.bastion.bastion}"
 }
