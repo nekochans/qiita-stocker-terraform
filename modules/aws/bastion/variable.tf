@@ -3,16 +3,21 @@ variable "bastion" {
 
   default = {
     default.name          = "bastion"
-    default.ami           = "ami-e99f4896"
+    default.ami           = "ami-00f9d04b3b3092052"
     default.instance_type = "t2.micro"
     default.volume_type   = "gp2"
-    default.volume_size   = "30"
+    default.volume_size   = "8"
   }
 }
 
 variable "vpc" {
   type = "map"
 
-  default = {
-  }
+  default = {}
+}
+
+variable "ssh_public_key_path" {
+  type = "string"
+
+  default = ""
 }
