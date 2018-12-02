@@ -3,6 +3,11 @@ resource "aws_s3_bucket" "web" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket" "web_access_logs" {
+  bucket        = "${terraform.workspace}-${var.bucket}-logs"
+  force_destroy = true
+}
+
 data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions   = ["s3:GetObject"]
@@ -18,6 +23,23 @@ data "aws_iam_policy_document" "s3_policy" {
 resource "aws_s3_bucket_policy" "web" {
   bucket = "${aws_s3_bucket.web.id}"
   policy = "${data.aws_iam_policy_document.s3_policy.json}"
+}
+
+data "aws_iam_policy_document" "web_access_logs" {
+  "statement" {
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.web_access_logs.arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["${aws_cloudfront_origin_access_identity.origin_access_identity.iam_arn}"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "web_access_logs" {
+  bucket = "${aws_s3_bucket.web_access_logs.id}"
+  policy = "${data.aws_iam_policy_document.web_access_logs.json}"
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
@@ -104,5 +126,11 @@ resource "aws_cloudfront_distribution" "web" {
     acm_certificate_arn            = "${lookup(var.acm, "main_arn")}"
     ssl_support_method             = "sni-only"
     minimum_protocol_version       = "TLSv1.1_2016"
+  }
+
+  logging_config {
+    include_cookies = true
+    bucket          = "${aws_s3_bucket.web_access_logs.bucket_domain_name}"
+    prefix          = "raw/"
   }
 }
