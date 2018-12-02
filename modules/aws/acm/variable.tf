@@ -1,4 +1,4 @@
-variable "ssh_public_key_path" {
+variable "main_domain_name" {
   type = "string"
 
   default = ""
