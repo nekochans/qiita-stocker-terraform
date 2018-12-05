@@ -23,4 +23,14 @@ variable "bastion" {
   default = {}
 }
 
+variable "main_domain_name" {
+  type = "string"
+
+  default = ""
+}
+
 data "aws_elb_service_account" "aws_elb_service_account" {}
+
+data "aws_acm_certificate" "main" {
+  domain = "*.${var.main_domain_name}"
+}

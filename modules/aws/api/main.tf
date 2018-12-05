@@ -172,7 +172,7 @@ resource "aws_lb_listener" "https" {
   protocol          = "HTTPS"
 
   ssl_policy      = "ELBSecurityPolicy-2016-08"
-  certificate_arn = "arn:aws:acm:ap-northeast-1:310040406861:certificate/b820d76f-4473-4ec1-a639-d2a623b4109e"
+  certificate_arn = "${data.aws_acm_certificate.main.arn}"
 
   default_action {
     target_group_arn = "${aws_lb_target_group.api.arn}"
