@@ -1,5 +1,5 @@
 resource "aws_security_group" "api" {
-  name        = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
+  name        = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
   description = "Security Group to ${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
@@ -37,12 +37,12 @@ resource "aws_security_group" "api" {
 }
 
 resource "aws_security_group" "alb" {
-  name        = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}-alb"
+  name        = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}_alb"
   description = "Security Group to ${lookup(var.api, "${terraform.env}.name", var.api["default.name"])} alb"
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
   tags {
-    Name = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}-alb"
+    Name = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}_alb"
   }
 
   ingress {
