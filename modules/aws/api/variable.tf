@@ -30,9 +30,12 @@ variable "main_domain_name" {
 }
 
 variable "sub_domain_name" {
-  type = "string"
+  type = "map"
 
-  default = "api"
+  default = {
+    stg.name     = "stg-api"
+    default.name = "api"
+  }
 }
 
 data "aws_elb_service_account" "aws_elb_service_account" {}

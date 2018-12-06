@@ -186,7 +186,7 @@ data "aws_route53_zone" "api" {
 
 resource "aws_route53_record" "api" {
   zone_id = "${data.aws_route53_zone.api.zone_id}"
-  name    = "${terraform.workspace}-${var.sub_domain_name}"
+  name    = "${lookup(var.sub_domain_name, "${terraform.env}.name", var.sub_domain_name["default.name"])}"
   type    = "A"
 
   alias {

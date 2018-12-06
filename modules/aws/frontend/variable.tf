@@ -11,9 +11,12 @@ variable "main_domain_name" {
 }
 
 variable "sub_domain_name" {
-  type = "string"
+  type = "map"
 
-  default = "www"
+  default = {
+    stg.name     = "stg-www"
+    default.name = "www"
+  }
 }
 
 variable "acm" {
