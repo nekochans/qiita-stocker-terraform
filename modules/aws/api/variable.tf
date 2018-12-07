@@ -29,6 +29,15 @@ variable "main_domain_name" {
   default = ""
 }
 
+variable "sub_domain_name" {
+  type = "map"
+
+  default = {
+    stg.name     = "stg-api"
+    default.name = "api"
+  }
+}
+
 data "aws_elb_service_account" "aws_elb_service_account" {}
 
 data "aws_acm_certificate" "main" {

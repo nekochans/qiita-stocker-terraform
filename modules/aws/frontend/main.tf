@@ -52,7 +52,7 @@ data "aws_route53_zone" "web" {
 
 resource "aws_route53_record" "web" {
   zone_id = "${data.aws_route53_zone.web.zone_id}"
-  name    = "${terraform.workspace}-${var.sub_domain_name}"
+  name    = "${lookup(var.sub_domain_name, "${terraform.env}.name", var.sub_domain_name["default.name"])}"
   type    = "A"
 
   alias {
@@ -82,7 +82,7 @@ resource "aws_cloudfront_distribution" "web" {
   is_ipv6_enabled     = true
   default_root_object = "index.html"
 
-  aliases = ["${terraform.workspace}-${var.sub_domain_name}.${var.main_domain_name}"]
+  aliases = ["${lookup(var.sub_domain_name, "${terraform.env}.name", var.sub_domain_name["default.name"])}.${var.main_domain_name}"]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
