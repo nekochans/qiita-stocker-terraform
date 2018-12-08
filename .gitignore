@@ -24,3 +24,4 @@ providers/aws/environments/11-acm/terraform.tfvars
 providers/aws/environments/20-bastion/terraform.tfvars
 providers/aws/environments/21-api/terraform.tfvars
 providers/aws/environments/22-frontend/terraform.tfvars
+providers/aws/environments/23-rds/terraform.tfvars
