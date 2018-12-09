@@ -46,13 +46,6 @@ resource "aws_security_group" "alb" {
   }
 
   ingress {
-    from_port   = 80
-    protocol    = "tcp"
-    to_port     = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     from_port   = 443
     protocol    = "tcp"
     to_port     = 443
@@ -153,17 +146,6 @@ resource "aws_lb_target_group" "api" {
 resource "aws_alb_target_group_attachment" "api_alb_attachment" {
   target_group_arn = "${aws_lb_target_group.api.arn}"
   target_id        = "${aws_instance.api_1a.id}"
-}
-
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = "${aws_lb.api.arn}"
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    target_group_arn = "${aws_lb_target_group.api.arn}"
-    type             = "forward"
-  }
 }
 
 resource "aws_lb_listener" "https" {
