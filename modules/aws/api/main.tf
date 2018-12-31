@@ -1,10 +1,10 @@
 resource "aws_security_group" "api" {
-  name        = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
+  name        = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
   description = "Security Group to ${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
   tags {
-    Name = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
+    Name = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
   }
 
   ingress {
@@ -37,12 +37,12 @@ resource "aws_security_group" "api" {
 }
 
 resource "aws_security_group" "alb" {
-  name        = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}_alb"
+  name        = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}-alb"
   description = "Security Group to ${lookup(var.api, "${terraform.env}.name", var.api["default.name"])} alb"
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
   tags {
-    Name = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}_alb"
+    Name = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}-alb"
   }
 
   ingress {
@@ -76,7 +76,7 @@ resource "aws_instance" "api_1a" {
   vpc_security_group_ids = ["${aws_security_group.api.id}"]
 
   tags {
-    Name = "${terraform.workspace}_${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}_1a"
+    Name = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}-1a"
   }
 
   lifecycle {
@@ -123,7 +123,7 @@ resource "aws_lb" "api" {
   }
 
   tags {
-    Name = "${terraform.workspace}_${var.api["default.name"]}_alb"
+    Name = "${terraform.workspace}-${var.api["default.name"]}-alb"
   }
 }
 

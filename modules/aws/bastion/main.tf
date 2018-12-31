@@ -4,7 +4,7 @@ resource "aws_security_group" "bastion" {
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
   tags {
-    Name = "${terraform.workspace}_${lookup(var.bastion, "${terraform.env}.name", var.bastion["default.name"])}"
+    Name = "${terraform.workspace}-${lookup(var.bastion, "${terraform.env}.name", var.bastion["default.name"])}"
   }
 
   egress {
@@ -45,7 +45,7 @@ resource "aws_instance" "bastion_1a" {
   vpc_security_group_ids = ["${aws_security_group.bastion.id}"]
 
   tags {
-    Name = "${terraform.workspace}_${lookup(var.bastion, "${terraform.env}.name", var.bastion["default.name"])}_1a"
+    Name = "${terraform.workspace}-${lookup(var.bastion, "${terraform.env}.name", var.bastion["default.name"])}-1a"
   }
 
   lifecycle {
@@ -59,6 +59,6 @@ resource "aws_eip" "bastion_ip_1a" {
   instance = "${aws_instance.bastion_1a.id}"
 
   tags {
-    Name = "${terraform.workspace}_bastion_1a"
+    Name = "${terraform.workspace}-bastion-1a"
   }
 }

@@ -12,13 +12,13 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags {
-    Name = "${terraform.workspace}_igw"
+    Name = "${terraform.workspace}-igw"
   }
 }
 
 resource "aws_eip" "nat_ip_1a" {
   tags {
-    Name = "${terraform.workspace}_nat_1a"
+    Name = "${terraform.workspace}-nat-1a"
   }
 }
 
@@ -28,7 +28,7 @@ resource "aws_subnet" "public_1a" {
   availability_zone = "${lookup(var.vpc, "default.az_1a")}"
 
   tags {
-    Name = "${terraform.workspace}_public_1a"
+    Name = "${terraform.workspace}-public-1a"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_subnet" "public_1c" {
   availability_zone = "${lookup(var.vpc, "default.az_1c")}"
 
   tags {
-    Name = "${terraform.workspace}_public_1c"
+    Name = "${terraform.workspace}-public-1c"
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_subnet" "public_1d" {
   availability_zone = "${lookup(var.vpc, "default.az_1d")}"
 
   tags {
-    Name = "${terraform.workspace}_public_1d"
+    Name = "${terraform.workspace}-public-1d"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_subnet" "private_1a" {
   availability_zone = "${lookup(var.vpc, "default.az_1a")}"
 
   tags {
-    Name = "${terraform.workspace}_private_1a"
+    Name = "${terraform.workspace}-private-1a"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_subnet" "private_1c" {
   availability_zone = "${lookup(var.vpc, "default.az_1c")}"
 
   tags {
-    Name = "${terraform.workspace}_private_1c"
+    Name = "${terraform.workspace}-private-1c"
   }
 }
 
@@ -78,7 +78,7 @@ resource "aws_subnet" "private_1d" {
   availability_zone = "${lookup(var.vpc, "default.az_1d")}"
 
   tags {
-    Name = "${terraform.workspace}_private_1d"
+    Name = "${terraform.workspace}-private-1d"
   }
 }
 
@@ -87,7 +87,7 @@ resource "aws_nat_gateway" "nat_1a" {
   subnet_id     = "${aws_subnet.public_1a.id}"
 
   tags {
-    Name = "${terraform.workspace}_1a"
+    Name = "${terraform.workspace}-1a"
   }
 }
 
@@ -100,7 +100,7 @@ resource "aws_route_table" "public" {
   }
 
   tags {
-    Name = "${terraform.workspace}_public_rt"
+    Name = "${terraform.workspace}-public-rt"
   }
 }
 
@@ -113,7 +113,7 @@ resource "aws_route_table" "private" {
   }
 
   tags {
-    Name = "${terraform.workspace}_private_rt"
+    Name = "${terraform.workspace}-private-rt"
   }
 }
 
@@ -247,7 +247,7 @@ resource "aws_network_acl" "public" {
   ]
 
   tags {
-    Name = "${terraform.workspace}_public"
+    Name = "${terraform.workspace}-public"
   }
 }
 
@@ -351,6 +351,6 @@ resource "aws_network_acl" "private" {
   ]
 
   tags {
-    Name = "${terraform.workspace}_private"
+    Name = "${terraform.workspace}-private"
   }
 }
