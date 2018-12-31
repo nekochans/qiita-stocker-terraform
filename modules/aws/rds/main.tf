@@ -1,5 +1,5 @@
 resource "aws_security_group" "rds_security" {
-  name        = "${terraform.workspace}_${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}-cluster"
+  name        = "${terraform.workspace}-${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}-cluster"
   description = "Security Group to ${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}"
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
