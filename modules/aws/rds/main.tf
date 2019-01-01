@@ -1,10 +1,10 @@
 resource "aws_security_group" "rds_security" {
-  name        = "${terraform.workspace}_${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}_cluster"
+  name        = "${terraform.workspace}-${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}-cluster"
   description = "Security Group to ${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}"
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
   tags {
-    Name = "${terraform.workspace}_${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}_cluster"
+    Name = "${terraform.workspace}-${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}-cluster"
   }
 
   ingress {
@@ -48,8 +48,8 @@ resource "aws_rds_cluster" "rds_cluster_serverless" {
 }
 
 resource "aws_db_subnet_group" "rds_subnet" {
-  name        = "${terraform.workspace}_${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}"
-  description = "${terraform.workspace}_${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}_subnet_group"
+  name        = "${terraform.workspace}-${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}"
+  description = "${terraform.workspace}-${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}-subnet-group"
   subnet_ids  = ["${var.vpc["subnet_private_1a_id"]}", "${var.vpc["subnet_private_1c_id"]}", "${var.vpc["subnet_private_1d_id"]}"]
 }
 
