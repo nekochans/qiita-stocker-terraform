@@ -115,8 +115,12 @@ resource "aws_rds_cluster_parameter_group" "database_cluster_parameter_group" {
 }
 
 resource "aws_route53_zone" "rds_local_domain_name" {
-  name    = "${terraform.workspace}"
-  vpc_id  = "${lookup(var.vpc, "vpc_id")}"
+  name = "${terraform.workspace}"
+
+  vpc {
+    vpc_id = "${lookup(var.vpc, "vpc_id")}"
+  }
+
   comment = "${terraform.workspace} RDS Local Domain"
 }
 
