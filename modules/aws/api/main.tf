@@ -143,11 +143,6 @@ resource "aws_lb_target_group" "api" {
   }
 }
 
-resource "aws_alb_target_group_attachment" "api_alb_attachment" {
-  target_group_arn = "${aws_lb_target_group.api.arn}"
-  target_id        = "${aws_instance.api_1a.id}"
-}
-
 resource "aws_lb_listener" "https" {
   load_balancer_arn = "${aws_lb.api.arn}"
   port              = 443
