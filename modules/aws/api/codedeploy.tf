@@ -38,3 +38,8 @@ resource "aws_codedeploy_deployment_group" "api_inplace_deploy" {
     ignore_changes = ["*"]
   }
 }
+
+resource "aws_s3_bucket" "api_deploy_bucket" {
+  bucket        = "${lookup(var.api, "${terraform.env}.deploy_bucket", var.api["default.deploy_bucket"])}"
+  force_destroy = true
+}

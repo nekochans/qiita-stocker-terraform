@@ -8,6 +8,8 @@ variable "api" {
     default.instance_type = "t2.micro"
     default.volume_type   = "gp2"
     default.volume_size   = "30"
+    default.deploy_bucket = "prod-qiita-stocker-api-deploy"
+    stg.deploy_bucket     = "stg-qiita-stocker-api-deploy"
   }
 }
 
