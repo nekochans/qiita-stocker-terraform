@@ -1,41 +1,3 @@
-resource "aws_security_group" "api" {
-  name        = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
-  description = "Security Group to ${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
-  vpc_id      = "${lookup(var.vpc, "vpc_id")}"
-
-  tags {
-    Name = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}"
-  }
-
-  ingress {
-    from_port       = 80
-    protocol        = "tcp"
-    to_port         = 80
-    security_groups = ["${aws_security_group.alb.id}"]
-  }
-
-  ingress {
-    from_port       = 80
-    protocol        = "tcp"
-    to_port         = 80
-    security_groups = ["${lookup(var.bastion, "bastion_security_id")}"]
-  }
-
-  ingress {
-    from_port       = 22
-    protocol        = "tcp"
-    to_port         = 22
-    security_groups = ["${lookup(var.bastion, "bastion_security_id")}"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_security_group" "alb" {
   name        = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}-alb"
   description = "Security Group to ${lookup(var.api, "${terraform.env}.name", var.api["default.name"])} alb"
@@ -57,32 +19,6 @@ resource "aws_security_group" "alb" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_instance" "api_1a" {
-  ami                         = "${lookup(var.api, "${terraform.env}.ami", var.api["default.ami"])}"
-  associate_public_ip_address = false
-  instance_type               = "${lookup(var.api, "${terraform.env}.instance_type", var.api["default.instance_type"])}"
-
-  ebs_block_device {
-    device_name = "/dev/xvda"
-    volume_type = "${lookup(var.api, "${terraform.env}.volume_type", var.api["default.volume_type"])}"
-    volume_size = "${lookup(var.api, "${terraform.env}.volume_size", var.api["default.volume_size"])}"
-  }
-
-  key_name               = "${lookup(var.bastion, "key_pair_id")}"
-  subnet_id              = "${var.vpc["subnet_private_1a_id"]}"
-  vpc_security_group_ids = ["${aws_security_group.api.id}"]
-
-  tags {
-    Name = "${terraform.workspace}-${lookup(var.api, "${terraform.env}.name", var.api["default.name"])}-1a"
-  }
-
-  lifecycle {
-    ignore_changes = [
-      "*",
-    ]
   }
 }
 
@@ -154,21 +90,5 @@ resource "aws_lb_listener" "https" {
   default_action {
     target_group_arn = "${aws_lb_target_group.api.arn}"
     type             = "forward"
-  }
-}
-
-data "aws_route53_zone" "api" {
-  name = "${var.main_domain_name}"
-}
-
-resource "aws_route53_record" "api" {
-  zone_id = "${data.aws_route53_zone.api.zone_id}"
-  name    = "${lookup(var.sub_domain_name, "${terraform.env}.name", var.sub_domain_name["default.name"])}"
-  type    = "A"
-
-  alias {
-    name                   = "${aws_lb.api.dns_name}"
-    zone_id                = "${aws_lb.api.zone_id}"
-    evaluate_target_health = false
   }
 }
