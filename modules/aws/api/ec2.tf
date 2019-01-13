@@ -60,6 +60,11 @@ data "aws_iam_policy_document" "ec2_policy" {
       "codedeploy:Get*",
       "codedeploy:List*",
       "codedeploy:RegisterApplicationRevision",
+      "cloudwatch:PutMetricData",
+      "cloudwatch:GetMetricStatistics",
+      "cloudwatch:ListMetrics",
+      "ec2:DescribeTags",
+      "kinesis:*",
     ]
 
     resources = ["*"]
