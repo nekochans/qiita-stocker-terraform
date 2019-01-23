@@ -10,6 +10,8 @@ data "aws_iam_policy_document" "codebuild_trust_relationship" {
       identifiers = [
         "codebuild.amazonaws.com",
         "codedeploy.amazonaws.com",
+        "secretsmanager.amazonaws.com",
+        "s3.amazonaws.com",
       ]
     }
   }
@@ -20,19 +22,11 @@ resource "aws_iam_role" "codebuild_role" {
   assume_role_policy = "${data.aws_iam_policy_document.codebuild_trust_relationship.json}"
 }
 
-resource "aws_iam_role_policy_attachment" "attach_codebuild_admin_to_codebuild_role" {
+// TODO 本当は良くないけど適切な権限設定が分からなかったのでAdministratorAccessを付与しておく
+// TODO 適切な権限設定が分かった時点で権限を見直す
+resource "aws_iam_role_policy_attachment" "attach_admin_access_to_codebuild_role" {
   role       = "${aws_iam_role.codebuild_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "attach_codedeploy_admin_to_codebuild_role" {
-  role       = "${aws_iam_role.codebuild_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
-}
-
-resource "aws_iam_role_policy_attachment" "attach_cloudwatch_admin_to_codebuild_role" {
-  role       = "${aws_iam_role.codebuild_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 resource "aws_codebuild_project" "api" {
