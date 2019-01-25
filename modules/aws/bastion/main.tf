@@ -17,7 +17,7 @@ resource "aws_security_group" "bastion" {
 
 resource "aws_key_pair" "ssh_key_pair" {
   public_key = "${file(var.ssh_public_key_path)}"
-  key_name   = "ssh_key"
+  key_name   = "${terraform.workspace}-ssh-key"
 }
 
 resource "aws_security_group_rule" "ssh_from_workplace" {
