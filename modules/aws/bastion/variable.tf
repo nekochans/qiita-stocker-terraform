@@ -3,7 +3,7 @@ variable "bastion" {
 
   default = {
     default.name          = "bastion"
-    default.ami           = "ami-00f9d04b3b3092052"
+    default.ami           = "ami-0d7ed3ddb85b521a6"
     default.instance_type = "t3.micro"
     default.volume_type   = "gp2"
     default.volume_size   = "8"
