@@ -70,7 +70,7 @@ resource "aws_lb_target_group" "api" {
   vpc_id   = "${lookup(var.vpc, "vpc_id")}"
 
   health_check {
-    path                = "/"
+    path                = "/api/statuses"
     timeout             = 5
     healthy_threshold   = 5
     unhealthy_threshold = 2
