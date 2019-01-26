@@ -2,8 +2,12 @@ variable "rds" {
   type = "map"
 
   default = {
-    default.name = "prod-database"
-    stg.name     = "stg-database"
+    default.name           = "prod-database"
+    stg.name               = "stg-database"
+    default.engine         = "aurora-mysql"
+    default.engine_version = "5.7.12"
+    default.instance_class = "db.t2.small"
+    default.instance_count = 1
   }
 }
 

@@ -123,16 +123,16 @@ resource "aws_rds_cluster" "rds_cluster" {
   preferred_maintenance_window    = "wed:20:15-wed:20:45"
   db_subnet_group_name            = "${aws_db_subnet_group.rds_subnet_group.name}"
   db_cluster_parameter_group_name = "${aws_rds_cluster_parameter_group.rds_cluster_parameter_group.name}"
-  engine                          = "aurora-mysql"
-  engine_version                  = "5.7.12"
+  engine                          = "${lookup(var.rds, "${terraform.env}.engine", var.rds["default.engine"])}"
+  engine_version                  = "${lookup(var.rds, "${terraform.env}.engine_version", var.rds["default.engine_version"])}"
 }
 
 resource "aws_rds_cluster_instance" "rds_cluster_instance" {
-  count                   = "1"
+  count                   = "${lookup(var.rds, "${terraform.env}.instance_count", var.rds["default.instance_count"])}"
   cluster_identifier      = "${aws_rds_cluster.rds_cluster.id}"
-  instance_class          = "db.t2.small"
-  engine                  = "aurora-mysql"
-  engine_version          = "5.7.12"
+  instance_class          = "${lookup(var.rds, "${terraform.env}.instance_class", var.rds["default.instance_class"])}"
+  engine                  = "${lookup(var.rds, "${terraform.env}.engine", var.rds["default.engine"])}"
+  engine_version          = "${lookup(var.rds, "${terraform.env}.engine_version", var.rds["default.engine_version"])}"
   identifier              = "${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}-${count.index}"
   db_subnet_group_name    = "${aws_db_subnet_group.rds_subnet_group.name}"
   db_parameter_group_name = "${aws_db_parameter_group.rds_parameter_group.name}"
