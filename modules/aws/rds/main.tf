@@ -7,19 +7,21 @@ resource "aws_security_group" "rds_cluster" {
     Name = "${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}"
   }
 
-  ingress {
-    from_port       = 3306
-    to_port         = 3306
-    protocol        = "tcp"
-    security_groups = ["${lookup(var.api, "api_security_id")}"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group_rule" "rds_from_api_server" {
+  security_group_id        = "${aws_security_group.rds_cluster.id}"
+  type                     = "ingress"
+  from_port                = "3306"
+  to_port                  = "3306"
+  protocol                 = "tcp"
+  source_security_group_id = "${lookup(var.api, "api_security_id")}"
 }
 
 resource "aws_db_subnet_group" "rds_subnet_group" {
@@ -136,6 +138,8 @@ resource "aws_rds_cluster_instance" "rds_cluster_instance" {
   identifier              = "${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}-${count.index}"
   db_subnet_group_name    = "${aws_db_subnet_group.rds_subnet_group.name}"
   db_parameter_group_name = "${aws_db_parameter_group.rds_parameter_group.name}"
+  monitoring_role_arn     = "${aws_iam_role.rds_monitoring.arn}"
+  monitoring_interval     = 60
 
   tags {
     Name = "${lookup(var.rds, "${terraform.env}.name", var.rds["default.name"])}-${count.index}"
