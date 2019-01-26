@@ -2,7 +2,8 @@ variable "rds" {
   type = "map"
 
   default = {
-    default.name = "database"
+    default.name = "prod-database"
+    stg.name     = "stg-database"
   }
 }
 
