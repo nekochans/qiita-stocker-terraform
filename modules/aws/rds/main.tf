@@ -74,7 +74,7 @@ resource "aws_rds_cluster_parameter_group" "rds_cluster_parameter_group" {
 
   parameter {
     name  = "character_set_filesystem"
-    value = "utf8mb4"
+    value = "binary"
   }
 
   parameter {
