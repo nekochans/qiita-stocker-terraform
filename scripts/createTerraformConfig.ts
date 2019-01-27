@@ -2,7 +2,8 @@ import {
   createNetworkBackend,
   createAcmBackend,
   createBastionBackend,
-  createApiBackend
+  createApiBackend,
+  createFrontendBackend
 } from "./createBackend";
 
 (async () => {
@@ -12,4 +13,5 @@ import {
   await createAcmBackend(deployStage);
   await createBastionBackend(deployStage);
   await createApiBackend(deployStage);
+  await createFrontendBackend(deployStage);
 })();

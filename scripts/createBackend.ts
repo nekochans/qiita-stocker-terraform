@@ -102,3 +102,31 @@ export const createApiBackend = async (deployStage: string): Promise<void> => {
 
   await createS3Backend(params);
 };
+
+export const createFrontendBackend = async (
+  deployStage: string
+): Promise<void> => {
+  const params = {
+    outputPath: "./providers/aws/environments/22-frontend/",
+    backendParams: {
+      requiredVersion: terraformVersion(),
+      backend: {
+        bucket: tfstateBucketName(deployStage),
+        key: "frontend/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    },
+    remoteStateList: [
+      {
+        name: "acm",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.env}/acm/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    ]
+  };
+
+  await createS3Backend(params);
+};
