@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "sourceMap": true,
+    "outDir": "dist",
+    "removeComments": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "newLine": "LF",
+    "declaration": true,
+    "declarationMap": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "esnext"
+    ]
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "scripts"
+  ]
+}
