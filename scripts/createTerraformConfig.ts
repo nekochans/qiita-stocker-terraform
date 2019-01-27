@@ -7,6 +7,13 @@ import {
   createRdsBackend
 } from "./createBackend";
 import createProvider from "./createProvider";
+import {
+  createAcmTfvars,
+  createBastionTfvars,
+  createApiTfvars,
+  createFrontendTfvars,
+  createRdsTfvars
+} from "./createTfvars";
 
 (async () => {
   const deployStage: string = <any>process.env.DEPLOY_STAGE;
@@ -29,4 +36,10 @@ import createProvider from "./createProvider";
   targetDirs.forEach(async (dir: string) => {
     await createProvider(deployStage, dir);
   });
+
+  await createAcmTfvars(deployStage);
+  await createBastionTfvars(deployStage);
+  await createApiTfvars(deployStage);
+  await createFrontendTfvars(deployStage);
+  await createRdsTfvars(deployStage);
 })();
