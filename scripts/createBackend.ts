@@ -69,3 +69,36 @@ export const createBastionBackend = async (
 
   await createS3Backend(params);
 };
+
+export const createApiBackend = async (deployStage: string): Promise<void> => {
+  const params = {
+    outputPath: "./providers/aws/environments/21-api/",
+    backendParams: {
+      requiredVersion: terraformVersion(),
+      backend: {
+        bucket: tfstateBucketName(deployStage),
+        key: "api/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    },
+    remoteStateList: [
+      {
+        name: "network",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.env}/network/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      },
+      {
+        name: "bastion",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.env}/bastion/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    ]
+  };
+
+  await createS3Backend(params);
+};
