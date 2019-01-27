@@ -4,7 +4,7 @@
   "scripts": {
     "tslint": "tslint --project tsconfig.json --config tslint.json 'scripts/**/*.{ts,tsx}'",
     "format": "tslint --project tsconfig.json --config tslint.json --fix 'scripts/**/*.{ts,tsx}'",
-    "createConfig:stg": "DEPLOY_STAGE=stg ts-node scripts/createTerraformConfig.ts"
+    "createConfig:dev": "DEPLOY_STAGE=dev ts-node scripts/createTerraformConfig.ts"
   },
   "devDependencies": {
     "@types/node": "^10.12.18",
