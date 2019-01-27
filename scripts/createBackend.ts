@@ -24,3 +24,20 @@ export const createNetworkBackend = async (
 
   await createS3Backend(params);
 };
+
+export const createAcmBackend = async (deployStage: string): Promise<void> => {
+  const params = {
+    outputPath: "./providers/aws/environments/11-acm/",
+    backendParams: {
+      requiredVersion: terraformVersion(),
+      backend: {
+        bucket: tfstateBucketName(deployStage),
+        key: "acm/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    }
+  };
+
+  await createS3Backend(params);
+};
