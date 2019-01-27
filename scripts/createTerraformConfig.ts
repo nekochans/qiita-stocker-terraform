@@ -1,3 +1,7 @@
+import { createNetworkBackend } from "./createBackend";
+
 (async () => {
-  console.log(process.env.DEPLOY_STAGE);
+  const deployStage: string = <any>process.env.DEPLOY_STAGE;
+
+  await createNetworkBackend(deployStage);
 })();
