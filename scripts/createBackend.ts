@@ -1,6 +1,12 @@
 import { createS3Backend } from "@nekonomokochan/terraform-config-creator";
 import {
+  acmOutputPath,
+  apiOutputPath,
   awsProfileName,
+  bastionOutputPath,
+  frontendOutputPath,
+  networkOutputPath,
+  rdsOutputPath,
   terraformVersion,
   tfstateBucketName,
   tfstateBucketRegion
@@ -10,7 +16,7 @@ export const createNetworkBackend = async (
   deployStage: string
 ): Promise<void> => {
   const params = {
-    outputPath: "./providers/aws/environments/10-network/",
+    outputPath: networkOutputPath(),
     backendParams: {
       requiredVersion: terraformVersion(),
       backend: {
@@ -27,7 +33,7 @@ export const createNetworkBackend = async (
 
 export const createAcmBackend = async (deployStage: string): Promise<void> => {
   const params = {
-    outputPath: "./providers/aws/environments/11-acm/",
+    outputPath: acmOutputPath(),
     backendParams: {
       requiredVersion: terraformVersion(),
       backend: {
@@ -46,7 +52,7 @@ export const createBastionBackend = async (
   deployStage: string
 ): Promise<void> => {
   const params = {
-    outputPath: "./providers/aws/environments/20-bastion/",
+    outputPath: bastionOutputPath(),
     backendParams: {
       requiredVersion: terraformVersion(),
       backend: {
@@ -64,7 +70,7 @@ export const createBastionBackend = async (
 
 export const createApiBackend = async (deployStage: string): Promise<void> => {
   const params = {
-    outputPath: "./providers/aws/environments/21-api/",
+    outputPath: apiOutputPath(),
     backendParams: {
       requiredVersion: terraformVersion(),
       backend: {
@@ -93,7 +99,7 @@ export const createFrontendBackend = async (
   deployStage: string
 ): Promise<void> => {
   const params = {
-    outputPath: "./providers/aws/environments/22-frontend/",
+    outputPath: frontendOutputPath(),
     backendParams: {
       requiredVersion: terraformVersion(),
       backend: {
@@ -119,7 +125,7 @@ export const createFrontendBackend = async (
 
 export const createRdsBackend = async (deployStage: string): Promise<void> => {
   const params = {
-    outputPath: "./providers/aws/environments/23-rds/",
+    outputPath: rdsOutputPath(),
     backendParams: {
       requiredVersion: terraformVersion(),
       backend: {

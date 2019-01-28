@@ -14,6 +14,7 @@ import {
   createFrontendTfvars,
   createRdsTfvars
 } from "./createTfvars";
+import { outputPathList } from "./terraformConfigUtil";
 
 (async () => {
   const deployStage: string = <any>process.env.DEPLOY_STAGE;
@@ -25,14 +26,7 @@ import {
   await createFrontendBackend(deployStage);
   await createRdsBackend(deployStage);
 
-  const targetDirs = [
-    "./providers/aws/environments/10-network/",
-    "./providers/aws/environments/11-acm/",
-    "./providers/aws/environments/20-bastion/",
-    "./providers/aws/environments/21-api/",
-    "./providers/aws/environments/22-frontend/",
-    "./providers/aws/environments/23-rds/"
-  ];
+  const targetDirs = outputPathList();
   targetDirs.forEach(async (dir: string) => {
     await createProvider(deployStage, dir);
   });
