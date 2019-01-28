@@ -14,10 +14,15 @@ import {
   createFrontendTfvars,
   createRdsTfvars
 } from "./createTfvars";
-import { outputPathList } from "./terraformConfigUtil";
+import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
 
 (async () => {
   const deployStage: string = <any>process.env.DEPLOY_STAGE;
+  if (!isAllowedDeployStage(deployStage)) {
+    return Promise.reject(
+      new Error("有効なステージではありません。dev, prod が利用出来ます。")
+    );
+  }
 
   await createNetworkBackend(deployStage);
   await createAcmBackend(deployStage);
@@ -36,4 +41,8 @@ import { outputPathList } from "./terraformConfigUtil";
   await createApiTfvars(deployStage);
   await createFrontendTfvars(deployStage);
   await createRdsTfvars(deployStage);
-})();
+
+  return Promise.resolve();
+})().catch((error: Error) => {
+  console.error(error);
+});

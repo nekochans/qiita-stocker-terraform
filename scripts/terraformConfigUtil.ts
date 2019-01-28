@@ -48,3 +48,7 @@ export const outputPathList = (): string[] => {
     rdsOutputPath()
   ];
 };
+
+export const isAllowedDeployStage = (deployStage: string) => {
+  return deployStage === "dev" || deployStage === "prod";
+};
