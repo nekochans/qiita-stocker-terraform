@@ -133,4 +133,7 @@ resource "aws_cloudfront_distribution" "web" {
     bucket          = "${aws_s3_bucket.web_access_logs.bucket_domain_name}"
     prefix          = "raw/"
   }
+
+  // TODO リリース日当日にこの記述を削除する
+  web_acl_id = "${aws_waf_web_acl.admin_app_acl.id}"
 }
