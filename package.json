@@ -1,0 +1,24 @@
+{
+  "name": "qiita-stocker-terraform",
+  "private": true,
+  "scripts": {
+    "tslint": "tslint --project tsconfig.json --config tslint.json 'scripts/**/*.{ts,tsx}'",
+    "format": "tslint --project tsconfig.json --config tslint.json --fix 'scripts/**/*.{ts,tsx}'",
+    "createConfig:dev": "DEPLOY_STAGE=dev ts-node scripts/createTerraformConfig.ts",
+    "createConfig:prod": "DEPLOY_STAGE=prod ts-node scripts/createTerraformConfig.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "prettier": "^1.16.1",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.2.4"
+  },
+  "dependencies": {
+    "@nekonomokochan/aws-env-creator": "^1.3.0",
+    "@nekonomokochan/terraform-config-creator": "^1.0.0"
+  }
+}
