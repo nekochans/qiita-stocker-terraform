@@ -4,7 +4,9 @@ import {
   createBastionBackend,
   createApiBackend,
   createFrontendBackend,
-  createRdsBackend
+  createRdsBackend,
+  createEcrBackend,
+  createEcsBackend
 } from "./createBackend";
 import createProvider from "./createProvider";
 import {
@@ -30,6 +32,8 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
   await createApiBackend(deployStage);
   await createFrontendBackend(deployStage);
   await createRdsBackend(deployStage);
+  await createEcrBackend(deployStage);
+  await createEcsBackend(deployStage);
 
   const targetDirs = outputPathList();
   targetDirs.forEach(async (dir: string) => {

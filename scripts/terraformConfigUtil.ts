@@ -38,6 +38,14 @@ export const rdsOutputPath = (): string => {
   return "./providers/aws/environments/23-rds/";
 };
 
+export const ecrOutputPath = (): string => {
+  return "./providers/aws/environments/24-ecr/";
+};
+
+export const ecsOutputPath = (): string => {
+  return "./providers/aws/environments/25-ecs/";
+};
+
 export const outputPathList = (): string[] => {
   return [
     networkOutputPath(),
@@ -45,7 +53,9 @@ export const outputPathList = (): string[] => {
     bastionOutputPath(),
     apiOutputPath(),
     frontendOutputPath(),
-    rdsOutputPath()
+    rdsOutputPath(),
+    ecrOutputPath(),
+    ecsOutputPath()
   ];
 };
 
