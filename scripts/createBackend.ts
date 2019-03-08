@@ -169,7 +169,6 @@ export const createEcrBackend = async (deployStage: string): Promise<void> => {
   await createS3Backend(params);
 };
 
-// TODO:修正
 export const createEcsBackend = async (deployStage: string): Promise<void> => {
   const params = {
     outputPath: ecsOutputPath(),
