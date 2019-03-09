@@ -1,11 +1,11 @@
 resource "aws_ecr_repository" "php" {
   count = "${terraform.workspace != "prod" ? 1 : 0}"
-  name  = "${terraform.workspace}-php"
+  name  = "${terraform.workspace}-api-php"
 }
 
 resource "aws_ecr_repository" "nginx" {
   count = "${terraform.workspace != "prod" ? 1 : 0}"
-  name  = "${terraform.workspace}-nginx"
+  name  = "${terraform.workspace}-api-nginx"
 }
 
 locals {

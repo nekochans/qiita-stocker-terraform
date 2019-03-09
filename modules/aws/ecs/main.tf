@@ -49,7 +49,7 @@ resource "aws_iam_instance_profile" "ecs_instance" {
 }
 
 data "template_file" "user_data" {
-  template = "${file("../../../../modules/aws/ecs/user_data/userdata.sh")}"
+  template = "${file("../../../../modules/aws/ecs/user-data/userdata.sh")}"
 
   vars {
     cluster_name = "${aws_ecs_cluster.api_ecs_cluster.name}"
