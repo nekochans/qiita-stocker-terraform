@@ -20,8 +20,8 @@ resource "aws_security_group_rule" "ecs_alb" {
   count             = "${terraform.workspace != "prod" ? 1 : 0}"
   security_group_id = "${aws_security_group.ecs_alb.id}"
   type              = "ingress"
-  from_port         = "80"
-  to_port           = "80"
+  from_port         = 443
+  to_port           = 443
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
 }
@@ -89,11 +89,31 @@ resource "aws_alb_target_group" "ecs" {
 resource "aws_alb_listener" "ecs_alb" {
   count             = "${terraform.workspace != "prod" ? 1 : 0}"
   load_balancer_arn = "${aws_alb.ecs_alb.id}"
-  port              = 80
-  protocol          = "HTTP"
+  port              = 443
+  protocol          = "HTTPS"
+
+  ssl_policy      = "ELBSecurityPolicy-2016-08"
+  certificate_arn = "${data.aws_acm_certificate.main.arn}"
 
   default_action {
     target_group_arn = "${aws_alb_target_group.ecs.id}"
     type             = "forward"
+  }
+}
+
+data "aws_route53_zone" "ecs_api" {
+  name = "${var.main_domain_name}"
+}
+
+resource "aws_route53_record" "ecs_api" {
+  count   = "${terraform.workspace != "prod" ? 1 : 0}"
+  zone_id = "${data.aws_route53_zone.ecs_api.zone_id}"
+  name    = "${lookup(var.sub_domain_name, "${terraform.env}.name", var.sub_domain_name["default.name"])}"
+  type    = "A"
+
+  alias {
+    name                   = "${aws_alb.ecs_alb.dns_name}"
+    zone_id                = "${aws_alb.ecs_alb.zone_id}"
+    evaluate_target_health = false
   }
 }

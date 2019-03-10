@@ -19,6 +19,12 @@
     "memory": 300,
     "essential": true,
     "links": ["php"],
+    "environment": [
+      {
+        "name": "PHP_HOST",
+        "value": "php"
+      }
+    ],
     "portMappings": [
       {
         "containerPort": 80,

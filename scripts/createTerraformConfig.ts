@@ -14,7 +14,8 @@ import {
   createBastionTfvars,
   createApiTfvars,
   createFrontendTfvars,
-  createRdsTfvars
+  createRdsTfvars,
+  createEcsTfvars
 } from "./createTfvars";
 import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
 
@@ -45,6 +46,7 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
   await createApiTfvars(deployStage);
   await createFrontendTfvars(deployStage);
   await createRdsTfvars(deployStage);
+  await createEcsTfvars(deployStage);
 
   return Promise.resolve();
 })().catch((error: Error) => {
