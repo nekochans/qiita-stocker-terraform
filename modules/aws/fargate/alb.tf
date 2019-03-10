@@ -1,10 +1,10 @@
 resource "aws_security_group" "fargate_api_alb" {
-  name        = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
-  description = "Security Group to ${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
+  name        = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb"
+  description = "Security Group to ${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb"
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
   tags {
-    Name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
+    Name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb"
   }
 
   egress {
@@ -25,7 +25,7 @@ resource "aws_security_group_rule" "fargate_api_alb" {
 }
 
 resource "aws_s3_bucket" "fargate_api_alb_logs" {
-  bucket        = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb-logs"
+  bucket        = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb-logs"
   force_destroy = true
 }
 
@@ -47,7 +47,7 @@ resource "aws_s3_bucket_policy" "fargate_api" {
 }
 
 resource "aws_alb" "fargate_alb" {
-  name                       = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  name                       = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
   internal                   = false
   load_balancer_type         = "application"
   security_groups            = ["${aws_security_group.fargate_api_alb.id}"]
@@ -60,12 +60,12 @@ resource "aws_alb" "fargate_alb" {
   }
 
   tags {
-    Name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
+    Name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb"
   }
 }
 
 resource "aws_alb_target_group" "fargate" {
-  name     = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  name     = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
   port     = 80
   protocol = "HTTP"
   vpc_id   = "${lookup(var.vpc, "vpc_id")}"

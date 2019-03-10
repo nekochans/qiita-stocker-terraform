@@ -1,10 +1,10 @@
 resource "aws_security_group" "fargate_api" {
-  name        = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
-  description = "Security Group to ${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  name        = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
+  description = "Security Group to ${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
   vpc_id      = "${lookup(var.vpc, "vpc_id")}"
 
   tags {
-    Name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+    Name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
   }
 
   egress {
@@ -34,7 +34,7 @@ resource "aws_security_group_rule" "rds_from_fargate_api_server" {
 }
 
 resource "aws_cloudwatch_log_group" "fargate_api" {
-  name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
 }
 
 data "template_file" "user_data" {
@@ -46,14 +46,14 @@ data "template_file" "user_data" {
 }
 
 resource "aws_ecs_cluster" "api_fargate_cluster" {
-  name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
 }
 
 data "template_file" "api_fargate_template_file" {
   template = "${file("../../../../modules/aws/fargate/task/api.json")}"
 
   vars {
-    aws_region      = "${lookup(var.ecs, "region")}"
+    aws_region      = "${lookup(var.fargate, "region")}"
     php_image_url   = "${element(var.ecr["php_image_url"], 0)}"
     nginx_image_url = "${element(var.ecr["nginx_image_url"], 0)}"
     aws_logs_group  = "${aws_cloudwatch_log_group.fargate_api.name}"
@@ -61,7 +61,7 @@ data "template_file" "api_fargate_template_file" {
 }
 
 resource "aws_ecs_task_definition" "api_fargate" {
-  family                   = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  family                   = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
   network_mode             = "awsvpc"
   container_definitions    = "${data.template_file.api_fargate_template_file.rendered}"
   cpu                      = 256
@@ -75,7 +75,7 @@ resource "aws_ecs_task_definition" "api_fargate" {
 }
 
 resource "aws_ecs_service" "api_ecs_service" {
-  name            = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  name            = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
   cluster         = "${aws_ecs_cluster.api_fargate_cluster.id}"
   task_definition = "${aws_ecs_task_definition.api_fargate.arn}"
   desired_count   = 1

@@ -1,4 +1,4 @@
-variable "ecs" {
+variable "fargate" {
   type = "map"
 
   default = {
