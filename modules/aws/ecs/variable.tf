@@ -31,3 +31,22 @@ variable "rds" {
 
   default = {}
 }
+
+variable "main_domain_name" {
+  type = "string"
+
+  default = ""
+}
+
+variable "sub_domain_name" {
+  type = "map"
+
+  default = {
+    stg.name     = "stg-ecs-api"
+    default.name = "ecs-api"
+  }
+}
+
+data "aws_acm_certificate" "main" {
+  domain = "*.${var.main_domain_name}"
+}
