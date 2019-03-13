@@ -7,6 +7,9 @@ import {
   frontendOutputPath,
   networkOutputPath,
   rdsOutputPath,
+  ecrOutputPath,
+  ecsOutputPath,
+  fargateOutputPath,
   terraformVersion,
   tfstateBucketName,
   tfstateBucketRegion
@@ -141,6 +144,93 @@ export const createRdsBackend = async (deployStage: string): Promise<void> => {
         name: "api",
         bucket: tfstateBucketName(deployStage),
         key: "env:/${terraform.env}/api/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    ]
+  };
+
+  await createS3Backend(params);
+};
+
+export const createEcrBackend = async (deployStage: string): Promise<void> => {
+  const params = {
+    outputPath: ecrOutputPath(),
+    backendParams: {
+      requiredVersion: terraformVersion(),
+      backend: {
+        bucket: tfstateBucketName(deployStage),
+        key: "ecr/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    }
+  };
+
+  await createS3Backend(params);
+};
+
+export const createEcsBackend = async (deployStage: string): Promise<void> => {
+  const params = {
+    outputPath: ecsOutputPath(),
+    backendParams: {
+      requiredVersion: terraformVersion(),
+      backend: {
+        bucket: tfstateBucketName(deployStage),
+        key: "ecs/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    },
+    remoteStateList: [
+      networkRemoteState(deployStage),
+      {
+        name: "rds",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.env}/rds/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      },
+      {
+        name: "ecr",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.env}/ecr/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    ]
+  };
+
+  await createS3Backend(params);
+};
+
+export const createFargateBackend = async (
+  deployStage: string
+): Promise<void> => {
+  const params = {
+    outputPath: fargateOutputPath(),
+    backendParams: {
+      requiredVersion: terraformVersion(),
+      backend: {
+        bucket: tfstateBucketName(deployStage),
+        key: "fargate/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    },
+    remoteStateList: [
+      networkRemoteState(deployStage),
+      {
+        name: "rds",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.env}/rds/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      },
+      {
+        name: "ecr",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.env}/ecr/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
       }

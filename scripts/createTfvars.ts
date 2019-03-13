@@ -96,3 +96,38 @@ export const createRdsTfvars = async (deployStage: string): Promise<void> => {
 
   await createEnvFile(params);
 };
+
+export const createEcsTfvars = async (deployStage: string): Promise<void> => {
+  const params = {
+    region: AwsRegion.ap_northeast_1,
+    profile: awsProfileName(deployStage),
+    type: EnvFileType.terraform,
+    outputDir: "./providers/aws/environments/25-ecs/",
+    secretIds: secretIds(deployStage),
+    outputWhitelist: ["MAIN_DOMAIN_NAME"],
+    keyMapping: {
+      MAIN_DOMAIN_NAME: "main_domain_name"
+    }
+  };
+
+  await createEnvFile(params);
+};
+
+export const createFargateTfvars = async (
+  deployStage: string
+): Promise<void> => {
+  const params = {
+    region: AwsRegion.ap_northeast_1,
+    profile: awsProfileName(deployStage),
+    type: EnvFileType.terraform,
+    outputDir: "./providers/aws/environments/26-fargate/",
+    secretIds: secretIds(deployStage),
+    outputWhitelist: ["MAIN_DOMAIN_NAME"],
+    keyMapping: {
+      MAIN_DOMAIN_NAME: "main_domain_name"
+    }
+  };
+
+  await createEnvFile(params);
+};
+createFargateTfvars;

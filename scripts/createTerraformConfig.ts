@@ -4,7 +4,10 @@ import {
   createBastionBackend,
   createApiBackend,
   createFrontendBackend,
-  createRdsBackend
+  createRdsBackend,
+  createEcrBackend,
+  createEcsBackend,
+  createFargateBackend
 } from "./createBackend";
 import createProvider from "./createProvider";
 import {
@@ -12,7 +15,9 @@ import {
   createBastionTfvars,
   createApiTfvars,
   createFrontendTfvars,
-  createRdsTfvars
+  createRdsTfvars,
+  createEcsTfvars,
+  createFargateTfvars
 } from "./createTfvars";
 import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
 
@@ -30,6 +35,9 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
   await createApiBackend(deployStage);
   await createFrontendBackend(deployStage);
   await createRdsBackend(deployStage);
+  await createEcrBackend(deployStage);
+  await createEcsBackend(deployStage);
+  await createFargateBackend(deployStage);
 
   const targetDirs = outputPathList();
   targetDirs.forEach(async (dir: string) => {
@@ -41,6 +49,8 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
   await createApiTfvars(deployStage);
   await createFrontendTfvars(deployStage);
   await createRdsTfvars(deployStage);
+  await createEcsTfvars(deployStage);
+  await createFargateTfvars(deployStage);
 
   return Promise.resolve();
 })().catch((error: Error) => {
