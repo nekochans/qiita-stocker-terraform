@@ -74,7 +74,7 @@ resource "aws_ecs_task_definition" "api_fargate" {
   ]
 }
 
-resource "aws_ecs_service" "api_ecs_service" {
+resource "aws_ecs_service" "api_fargate_service" {
   name            = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
   cluster         = "${aws_ecs_cluster.api_fargate_cluster.id}"
   task_definition = "${aws_ecs_task_definition.api_fargate.arn}"
@@ -82,7 +82,7 @@ resource "aws_ecs_service" "api_ecs_service" {
   launch_type     = "FARGATE"
 
   load_balancer {
-    target_group_arn = "${aws_alb_target_group.fargate.id}"
+    target_group_arn = "${aws_alb_target_group.fargate_api_blue.id}"
     container_name   = "nginx"
     container_port   = 80
   }
@@ -92,6 +92,17 @@ resource "aws_ecs_service" "api_ecs_service" {
 
     security_groups = [
       "${aws_security_group.fargate_api.id}",
+    ]
+  }
+
+  deployment_controller {
+    type = "CODE_DEPLOY"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      "task_definition",
+      "load_balancer",
     ]
   }
 
