@@ -64,8 +64,26 @@ resource "aws_alb" "fargate_alb" {
   }
 }
 
-resource "aws_alb_target_group" "fargate" {
-  name     = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
+resource "aws_alb_target_group" "fargate_api_blue" {
+  name     = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-blue"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = "${lookup(var.vpc, "vpc_id")}"
+
+  health_check {
+    path                = "/api/statuses"
+    timeout             = 5
+    healthy_threshold   = 5
+    unhealthy_threshold = 2
+    interval            = 20
+    matcher             = 200
+  }
+
+  target_type = "ip"
+}
+
+resource "aws_alb_target_group" "fargate_api_green" {
+  name     = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-green"
   port     = 80
   protocol = "HTTP"
   vpc_id   = "${lookup(var.vpc, "vpc_id")}"
@@ -90,8 +108,12 @@ resource "aws_alb_listener" "fargate_alb" {
   ssl_policy      = "ELBSecurityPolicy-2016-08"
   certificate_arn = "${data.aws_acm_certificate.main.arn}"
 
+  lifecycle {
+    ignore_changes = ["default_action"]
+  }
+
   default_action {
-    target_group_arn = "${aws_alb_target_group.fargate.id}"
+    target_group_arn = "${aws_alb_target_group.fargate_api_blue.id}"
     type             = "forward"
   }
 }
