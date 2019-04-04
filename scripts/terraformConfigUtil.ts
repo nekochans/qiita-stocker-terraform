@@ -1,5 +1,5 @@
 export const terraformVersion = (): string => {
-  return "=0.11.10";
+  return "=0.11.13";
 };
 
 export const tfstateBucketName = (deployStage: string): string => {
