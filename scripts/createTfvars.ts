@@ -9,6 +9,22 @@ const secretIds = (deployStage: string) => {
   return [`${deployStage}/qiita-stocker-terraform`];
 };
 
+export const createNetworkTfvars = async (deployStage: string): Promise<void> => {
+  const params = {
+    region: AwsRegion.ap_northeast_1,
+    profile: awsProfileName(deployStage),
+    type: EnvFileType.terraform,
+    outputDir: "./providers/aws/environments/10-network/",
+    secretIds: secretIds(deployStage),
+    outputWhitelist: ["SSH_PUBLIC_KEY_PATH"],
+    keyMapping: {
+      SSH_PUBLIC_KEY_PATH: "ssh_public_key_path"
+    }
+  };
+
+  await createEnvFile(params);
+};
+
 export const createAcmTfvars = async (deployStage: string): Promise<void> => {
   const params = {
     region: AwsRegion.ap_northeast_1,
@@ -130,4 +146,3 @@ export const createFargateTfvars = async (
 
   await createEnvFile(params);
 };
-createFargateTfvars;

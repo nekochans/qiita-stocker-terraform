@@ -17,7 +17,7 @@ import {
   createFrontendTfvars,
   createRdsTfvars,
   createEcsTfvars,
-  createFargateTfvars
+  createFargateTfvars, createNetworkTfvars
 } from "./createTfvars";
 import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
 
@@ -44,6 +44,7 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
     await createProvider(deployStage, dir);
   });
 
+  await createNetworkTfvars(deployStage);
   await createAcmTfvars(deployStage);
   await createBastionTfvars(deployStage);
   await createApiTfvars(deployStage);
