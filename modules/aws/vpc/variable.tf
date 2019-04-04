@@ -23,3 +23,22 @@ variable "vpc" {
     stg.private_1d     = "10.3.12.0/24"
   }
 }
+
+variable "nat_instance" {
+  type = "map"
+
+  default = {
+    default.name          = "prod-nat"
+    stg.name              = "stg-nat"
+    default.ami           = "ami-00d29e4cb217ae06b"
+    default.instance_type = "t2.micro"
+    default.volume_type   = "gp2"
+    default.volume_size   = "30"
+  }
+}
+
+variable "ssh_public_key_path" {
+  type = "string"
+
+  default = ""
+}
