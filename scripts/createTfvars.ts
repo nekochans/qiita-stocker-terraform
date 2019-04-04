@@ -9,7 +9,9 @@ const secretIds = (deployStage: string) => {
   return [`${deployStage}/qiita-stocker-terraform`];
 };
 
-export const createNetworkTfvars = async (deployStage: string): Promise<void> => {
+export const createNetworkTfvars = async (
+  deployStage: string
+): Promise<void> => {
   const params = {
     region: AwsRegion.ap_northeast_1,
     profile: awsProfileName(deployStage),
