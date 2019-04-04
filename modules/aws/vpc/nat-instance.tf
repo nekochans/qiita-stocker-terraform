@@ -7,19 +7,39 @@ resource "aws_security_group" "nat_instance" {
     Name = "${lookup(var.nat_instance, "${terraform.env}.name", var.nat_instance["default.name"])}"
   }
 
-  ingress {
-    from_port   = 22
-    protocol    = "tcp"
-    to_port     = 22
-    cidr_blocks = ["${aws_vpc.vpc.cidr_block}"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group_rule" "ssh_from_vpc_to_nat_instance" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type              = "ingress"
+  from_port         = "22"
+  to_port           = "22"
+  protocol          = "tcp"
+  cidr_blocks       = ["${aws_vpc.vpc.cidr_block}"]
+}
+
+resource "aws_security_group_rule" "http_from_vpc_to_nat_instance" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type              = "ingress"
+  from_port         = "80"
+  to_port           = "80"
+  protocol          = "tcp"
+  cidr_blocks       = ["${aws_vpc.vpc.cidr_block}"]
+}
+
+resource "aws_security_group_rule" "https_from_vpc_to_nat_instance" {
+  security_group_id = "${aws_security_group.nat_instance.id}"
+  type              = "ingress"
+  from_port         = "443"
+  to_port           = "443"
+  protocol          = "tcp"
+  cidr_blocks       = ["${aws_vpc.vpc.cidr_block}"]
 }
 
 resource "aws_key_pair" "nat_ssh_key_pair" {
@@ -92,6 +112,7 @@ resource "aws_instance" "nat_instance_1c" {
 
   iam_instance_profile = "${aws_iam_instance_profile.nat_instance_profile.name}"
   monitoring           = true
+  source_dest_check    = false
 
   lifecycle {
     ignore_changes = [
