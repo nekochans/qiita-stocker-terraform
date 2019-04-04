@@ -69,12 +69,6 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-resource "aws_eip" "nat_ip_1a" {
-  tags {
-    Name = "${terraform.workspace}-nat-1a"
-  }
-}
-
 resource "aws_subnet" "public_1a" {
   vpc_id            = "${aws_vpc.vpc.id}"
   cidr_block        = "${lookup(var.vpc, "${terraform.env}.public_1a", var.vpc["default.public_1a"])}"
@@ -132,15 +126,6 @@ resource "aws_subnet" "private_1d" {
 
   tags {
     Name = "${terraform.workspace}-private-1d"
-  }
-}
-
-resource "aws_nat_gateway" "nat_1a" {
-  allocation_id = "${aws_eip.nat_ip_1a.id}"
-  subnet_id     = "${aws_subnet.public_1a.id}"
-
-  tags {
-    Name = "${terraform.workspace}-1a"
   }
 }
 
