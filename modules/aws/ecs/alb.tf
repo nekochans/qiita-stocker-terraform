@@ -26,30 +26,6 @@ resource "aws_security_group_rule" "ecs_alb" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-resource "aws_s3_bucket" "ecs_api_alb_logs" {
-  count         = "${terraform.workspace != "prod" ? 1 : 0}"
-  bucket        = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb-logs"
-  force_destroy = true
-}
-
-data "aws_iam_policy_document" "put_ecs_api_alb_logs_policy" {
-  "statement" {
-    actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.ecs_api_alb_logs.arn}/*"]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["${data.aws_elb_service_account.aws_elb_service_account.id}"]
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "ecs_api" {
-  count  = "${terraform.workspace != "prod" ? 1 : 0}"
-  bucket = "${aws_s3_bucket.ecs_api_alb_logs.id}"
-  policy = "${data.aws_iam_policy_document.put_ecs_api_alb_logs_policy.json}"
-}
-
 resource "aws_alb" "ecs_alb" {
   count                      = "${terraform.workspace != "prod" ? 1 : 0}"
   name                       = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
@@ -58,11 +34,6 @@ resource "aws_alb" "ecs_alb" {
   security_groups            = ["${aws_security_group.ecs_alb.id}"]
   subnets                    = ["${var.vpc["subnet_public_1a_id"]}", "${var.vpc["subnet_public_1c_id"]}", "${var.vpc["subnet_public_1d_id"]}"]
   enable_deletion_protection = false
-
-  access_logs {
-    enabled = true
-    bucket  = "${aws_s3_bucket.ecs_api_alb_logs.bucket}"
-  }
 
   tags {
     Name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
