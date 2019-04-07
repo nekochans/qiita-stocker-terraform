@@ -4,7 +4,6 @@ variable "ecs" {
   default = {
     default.name          = "prod-ecs-api"
     stg.name              = "stg-ecs-api"
-    region                = "ap-northeast-1"
     default.instance_type = "t2.micro"
     default.volume_size   = "30"
     default.volume_type   = "gp2"
@@ -15,6 +14,12 @@ variable "ecs" {
 data "aws_elb_service_account" "aws_elb_service_account" {}
 
 variable "vpc" {
+  type = "map"
+
+  default = {}
+}
+
+variable "bastion" {
   type = "map"
 
   default = {}

@@ -185,6 +185,13 @@ export const createEcsBackend = async (deployStage: string): Promise<void> => {
     remoteStateList: [
       networkRemoteState(deployStage),
       {
+        name: "bastion",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.env}/bastion/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      },
+      {
         name: "rds",
         bucket: tfstateBucketName(deployStage),
         key: "env:/${terraform.env}/rds/terraform.tfstate",

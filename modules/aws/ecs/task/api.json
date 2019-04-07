@@ -3,15 +3,7 @@
     "name": "php",
     "image": "${php_image_url}",
     "memory": 300,
-    "essential": true,
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${aws_logs_group}",
-        "awslogs-region": "${aws_region}",
-        "awslogs-stream-prefix": "ecs"
-      }
-    }
+    "essential": true
   },
   {
     "name": "nginx",
@@ -31,14 +23,6 @@
         "hostPort": 80,
         "protocol": "tcp"
       }
-    ],
-    "logConfiguration": {
-      "logDriver": "awslogs",
-      "options": {
-        "awslogs-group": "${aws_logs_group}",
-        "awslogs-region": "${aws_region}",
-        "awslogs-stream-prefix": "ecs"
-      }
-    }
+    ]
   }
 ]

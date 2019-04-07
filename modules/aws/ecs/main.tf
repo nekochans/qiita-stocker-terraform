@@ -26,6 +26,16 @@ resource "aws_security_group_rule" "ecs_api_from_alb" {
   source_security_group_id = "${aws_security_group.ecs_alb.id}"
 }
 
+resource "aws_security_group_rule" "ssh_from_bastion_to_ecs_api" {
+  count                    = "${terraform.workspace != "prod" ? 1 : 0}"
+  security_group_id        = "${aws_security_group.ecs_api.id}"
+  type                     = "ingress"
+  from_port                = "22"
+  to_port                  = "22"
+  protocol                 = "tcp"
+  source_security_group_id = "${lookup(var.bastion, "bastion_security_id")}"
+}
+
 resource "aws_security_group_rule" "rds_from_ecs_api_server" {
   count                    = "${terraform.workspace != "prod" ? 1 : 0}"
   security_group_id        = "${lookup(var.rds, "rds_security_id")}"
@@ -34,18 +44,6 @@ resource "aws_security_group_rule" "rds_from_ecs_api_server" {
   to_port                  = "3306"
   protocol                 = "tcp"
   source_security_group_id = "${aws_security_group.ecs_api.id}"
-}
-
-resource "aws_cloudwatch_log_group" "ecs_api" {
-  count = "${terraform.workspace != "prod" ? 1 : 0}"
-  name  = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
-}
-
-resource "aws_iam_instance_profile" "ecs_instance" {
-  count = "${terraform.workspace != "prod" ? 1 : 0}"
-  name  = "${terraform.workspace}-ecs-instance-profile"
-  path  = "/"
-  role  = "${aws_iam_role.ecs_service.name}"
 }
 
 data "template_file" "user_data" {
@@ -63,6 +61,7 @@ resource "aws_instance" "ecs_instance" {
   instance_type               = "${lookup(var.ecs, "${terraform.env}.instance_type", var.ecs["default.instance_type"])}"
   subnet_id                   = "${var.vpc["subnet_private_1a_id"]}"
   vpc_security_group_ids      = ["${aws_security_group.ecs_api.id}"]
+  key_name                    = "${lookup(var.bastion, "key_pair_id")}"
 
   tags {
     Name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-1a"
@@ -89,10 +88,8 @@ data "template_file" "api_template_file" {
   template = "${file("../../../../modules/aws/ecs/task/api.json")}"
 
   vars {
-    aws_region      = "${lookup(var.ecs, "region")}"
     php_image_url   = "${element(var.ecr["php_image_url"], 0)}"
     nginx_image_url = "${element(var.ecr["nginx_image_url"], 0)}"
-    aws_logs_group  = "${aws_cloudwatch_log_group.ecs_api.name}"
   }
 }
 
@@ -101,10 +98,6 @@ resource "aws_ecs_task_definition" "api" {
   family                = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
   network_mode          = "bridge"
   container_definitions = "${data.template_file.api_template_file.rendered}"
-
-  depends_on = [
-    "aws_cloudwatch_log_group.ecs_api",
-  ]
 }
 
 resource "aws_ecs_service" "api_ecs_service" {
@@ -113,7 +106,7 @@ resource "aws_ecs_service" "api_ecs_service" {
   cluster         = "${aws_ecs_cluster.api_ecs_cluster.id}"
   task_definition = "${aws_ecs_task_definition.api.arn}"
   desired_count   = 1
-  iam_role        = "${aws_iam_role.ecs_service.arn}"
+  iam_role        = "${aws_iam_role.ecs_service_role.arn}"
 
   load_balancer {
     target_group_arn = "${aws_alb_target_group.ecs.id}"
@@ -123,6 +116,5 @@ resource "aws_ecs_service" "api_ecs_service" {
 
   depends_on = [
     "aws_alb_listener.ecs_alb",
-    "aws_iam_role_policy.ecs_service_role",
   ]
 }
