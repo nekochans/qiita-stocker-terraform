@@ -2,14 +2,8 @@ variable "api" {
   type = "map"
 
   default = {
-    default.project       = "qiita-stocker"
-    default.name          = "api"
-    default.ami           = "ami-0d7ed3ddb85b521a6"
-    default.instance_type = "t2.micro"
-    default.volume_type   = "gp2"
-    default.volume_size   = "30"
-    default.deploy_bucket = "prod-qiita-stocker-api-deploy"
-    stg.deploy_bucket     = "stg-qiita-stocker-api-deploy"
+    default.project = "qiita-stocker"
+    default.name    = "api"
   }
 }
 

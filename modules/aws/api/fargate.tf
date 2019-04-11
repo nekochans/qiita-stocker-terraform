@@ -24,15 +24,6 @@ resource "aws_security_group_rule" "fargate_api_from_alb" {
   source_security_group_id = "${aws_security_group.fargate_api_alb.id}"
 }
 
-resource "aws_security_group_rule" "rds_from_fargate_api_server" {
-  security_group_id        = "${lookup(var.rds, "rds_security_id")}"
-  type                     = "ingress"
-  from_port                = "3306"
-  to_port                  = "3306"
-  protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.fargate_api.id}"
-}
-
 resource "aws_cloudwatch_log_group" "fargate_api" {
   name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
 }
