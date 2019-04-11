@@ -47,7 +47,7 @@ resource "aws_security_group_rule" "rds_from_ecs_api_server" {
 }
 
 data "template_file" "user_data" {
-  template = "${file("../../../../modules/aws/ecs/user-data/userdata.sh")}"
+  template = "${file("../../../../modules/aws/api/user-data/userdata.sh")}"
 
   vars {
     cluster_name = "${aws_ecs_cluster.api_ecs_cluster.name}"
@@ -77,6 +77,12 @@ resource "aws_instance" "ecs_instance" {
   }
 
   user_data = "${data.template_file.user_data.rendered}"
+
+  lifecycle {
+    ignore_changes = [
+      "ebs_block_device",
+    ]
+  }
 }
 
 resource "aws_ecs_cluster" "api_ecs_cluster" {
@@ -85,7 +91,7 @@ resource "aws_ecs_cluster" "api_ecs_cluster" {
 }
 
 data "template_file" "api_template_file" {
-  template = "${file("../../../../modules/aws/ecs/task/ecs-api.json")}"
+  template = "${file("../../../../modules/aws/api/task/ecs-api.json")}"
 
   vars {
     php_image_url   = "${element(var.ecr["php_image_url"], 0)}"
