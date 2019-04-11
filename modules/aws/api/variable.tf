@@ -72,9 +72,3 @@ variable "ecr" {
 
   default = {}
 }
-
-variable "rds" {
-  type = "map"
-
-  default = {}
-}

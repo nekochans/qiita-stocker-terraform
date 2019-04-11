@@ -36,16 +36,6 @@ resource "aws_security_group_rule" "ssh_from_bastion_to_ecs_api" {
   source_security_group_id = "${lookup(var.bastion, "bastion_security_id")}"
 }
 
-resource "aws_security_group_rule" "rds_from_ecs_api_server" {
-  count                    = "${terraform.workspace != "prod" ? 1 : 0}"
-  security_group_id        = "${lookup(var.rds, "rds_security_id")}"
-  type                     = "ingress"
-  from_port                = "3306"
-  to_port                  = "3306"
-  protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.ecs_api.id}"
-}
-
 data "template_file" "user_data" {
   count    = "${terraform.workspace != "prod" ? 1 : 0}"
   template = "${file("../../../../modules/aws/api/user-data/userdata.sh")}"
