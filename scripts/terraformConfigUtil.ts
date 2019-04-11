@@ -39,7 +39,7 @@ export const rdsOutputPath = (): string => {
 };
 
 export const ecrOutputPath = (): string => {
-  return "./providers/aws/environments/24-ecr/";
+  return "./providers/aws/environments/12-ecr/";
 };
 
 export const ecsOutputPath = (): string => {
