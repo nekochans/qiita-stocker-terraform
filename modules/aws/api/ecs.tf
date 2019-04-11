@@ -47,6 +47,7 @@ resource "aws_security_group_rule" "rds_from_ecs_api_server" {
 }
 
 data "template_file" "user_data" {
+  count    = "${terraform.workspace != "prod" ? 1 : 0}"
   template = "${file("../../../../modules/aws/api/user-data/userdata.sh")}"
 
   vars {
