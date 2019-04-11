@@ -26,6 +26,16 @@ variable "ecs" {
   }
 }
 
+variable "fargate" {
+  type = "map"
+
+  default = {
+    default.name = "prod-fargate-api"
+    stg.name     = "stg-fargate-api"
+    region       = "ap-northeast-1"
+  }
+}
+
 variable "vpc" {
   type = "map"
 
@@ -48,10 +58,12 @@ variable "sub_domain_name" {
   type = "map"
 
   default = {
-    stg.name         = "stg-api"
-    default.name     = "api"
-    stg.ecs_name     = "stg-ecs-api"
-    default.ecs_name = "ecs-api"
+    stg.name             = "stg-api"
+    default.name         = "api"
+    stg.ecs_name         = "stg-ecs-api"
+    default.ecs_name     = "ecs-api"
+    stg.fargate_name     = "stg-fargate-api"
+    default.fargate_name = "fargate-api"
   }
 }
 

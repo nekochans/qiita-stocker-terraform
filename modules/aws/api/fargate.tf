@@ -42,7 +42,7 @@ resource "aws_ecs_cluster" "api_fargate_cluster" {
 }
 
 data "template_file" "api_fargate_template_file" {
-  template = "${file("../../../../modules/aws/fargate/task/api.json")}"
+  template = "${file("../../../../modules/aws/api/task/fargate-api.json")}"
 
   vars {
     aws_region      = "${lookup(var.fargate, "region")}"

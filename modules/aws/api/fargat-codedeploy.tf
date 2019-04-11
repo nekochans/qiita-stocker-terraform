@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "codedeploy_trust_relationship" {
+data "aws_iam_policy_document" "codedeploy_for_fargate_trust_relationship" {
   "statement" {
     effect = "Allow"
 
@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "codedeploy_trust_relationship" {
   }
 }
 
-data "aws_iam_policy_document" "codedeploy_policy" {
+data "aws_iam_policy_document" "codedeploy_for_fagate" {
   "statement" {
     effect = "Allow"
 
@@ -24,24 +24,24 @@ data "aws_iam_policy_document" "codedeploy_policy" {
   }
 }
 
-resource "aws_iam_role" "codedeploy_role" {
+resource "aws_iam_role" "codedeploy_for_fargate_role" {
   name               = "${terraform.workspace}-fargate-codedeploy-role"
-  assume_role_policy = "${data.aws_iam_policy_document.codedeploy_trust_relationship.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.codedeploy_for_fargate_trust_relationship.json}"
 }
 
-resource "aws_iam_role_policy" "codedeploy" {
+resource "aws_iam_role_policy" "codedeploy_for_fargate" {
   name   = "${terraform.workspace}-fargate-codedeploy"
-  role   = "${aws_iam_role.codedeploy_role.id}"
-  policy = "${data.aws_iam_policy_document.codedeploy_policy.json}"
+  role   = "${aws_iam_role.codedeploy_for_fargate_role.id}"
+  policy = "${data.aws_iam_policy_document.codedeploy_for_fagate.json}"
 }
 
-resource "aws_iam_role_policy_attachment" "codedeploy_role" {
-  role       = "${aws_iam_role.codedeploy_role.name}"
+resource "aws_iam_role_policy_attachment" "codedeploy_role_attach" {
+  role       = "${aws_iam_role.codedeploy_for_fargate_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
 }
 
-resource "aws_iam_role_policy_attachment" "codedeploy_role_ecs" {
-  role       = "${aws_iam_role.codedeploy_role.name}"
+resource "aws_iam_role_policy_attachment" "codedeploy_role_ecs_attach" {
+  role       = "${aws_iam_role.codedeploy_for_fargate_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployRoleForECSLimited"
 }
 
@@ -53,7 +53,7 @@ resource "aws_codedeploy_app" "fargate_api" {
 resource "aws_codedeploy_deployment_group" "fargate_api_blue_green_deploy" {
   app_name               = "${aws_codedeploy_app.fargate_api.name}"
   deployment_group_name  = "blue-green"
-  service_role_arn       = "${aws_iam_role.codedeploy_role.arn}"
+  service_role_arn       = "${aws_iam_role.codedeploy_for_fargate_role.arn}"
   deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
 
   auto_rollback_configuration {
