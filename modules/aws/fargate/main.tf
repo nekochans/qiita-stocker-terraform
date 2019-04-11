@@ -37,14 +37,6 @@ resource "aws_cloudwatch_log_group" "fargate_api" {
   name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
 }
 
-data "template_file" "user_data" {
-  template = "${file("../../../../modules/aws/fargate/user-data/userdata.sh")}"
-
-  vars {
-    cluster_name = "${aws_ecs_cluster.api_fargate_cluster.name}"
-  }
-}
-
 resource "aws_ecs_cluster" "api_fargate_cluster" {
   name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
 }
