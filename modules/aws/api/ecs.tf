@@ -85,7 +85,7 @@ resource "aws_ecs_cluster" "api_ecs_cluster" {
 }
 
 data "template_file" "api_template_file" {
-  template = "${file("../../../../modules/aws/ecs/task/api.json")}"
+  template = "${file("../../../../modules/aws/ecs/task/ecs-api.json")}"
 
   vars {
     php_image_url   = "${element(var.ecr["php_image_url"], 0)}"

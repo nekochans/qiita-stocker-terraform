@@ -1,9 +1,9 @@
 resource "aws_ecr_repository" "php" {
-  name  = "${terraform.workspace}-api-php"
+  name = "${terraform.workspace}-api-php"
 }
 
 resource "aws_ecr_repository" "nginx" {
-  name  = "${terraform.workspace}-api-nginx"
+  name = "${terraform.workspace}-api-nginx"
 }
 
 locals {
