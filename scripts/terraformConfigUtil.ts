@@ -42,10 +42,6 @@ export const ecrOutputPath = (): string => {
   return "./providers/aws/environments/12-ecr/";
 };
 
-export const ecsOutputPath = (): string => {
-  return "./providers/aws/environments/25-ecs/";
-};
-
 export const fargateOutputPath = (): string => {
   return "./providers/aws/environments/26-fargate/";
 };
@@ -59,7 +55,6 @@ export const outputPathList = (): string[] => {
     frontendOutputPath(),
     rdsOutputPath(),
     ecrOutputPath(),
-    ecsOutputPath(),
     fargateOutputPath()
   ];
 };

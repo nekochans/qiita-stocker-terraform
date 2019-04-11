@@ -6,7 +6,6 @@ import {
   createFrontendBackend,
   createRdsBackend,
   createEcrBackend,
-  createEcsBackend,
   createFargateBackend
 } from "./createBackend";
 import createProvider from "./createProvider";
@@ -16,7 +15,6 @@ import {
   createApiTfvars,
   createFrontendTfvars,
   createRdsTfvars,
-  createEcsTfvars,
   createFargateTfvars,
   createNetworkTfvars
 } from "./createTfvars";
@@ -38,7 +36,6 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
     createFrontendBackend(deployStage),
     createRdsBackend(deployStage),
     createEcrBackend(deployStage),
-    createEcsBackend(deployStage),
     createFargateBackend(deployStage),
     createNetworkTfvars(deployStage),
     createAcmTfvars(deployStage),
@@ -46,7 +43,6 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
     createApiTfvars(deployStage),
     createFrontendTfvars(deployStage),
     createRdsTfvars(deployStage),
-    createEcsTfvars(deployStage),
     createFargateTfvars(deployStage)
   ]);
 
