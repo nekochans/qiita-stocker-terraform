@@ -24,6 +24,16 @@ resource "aws_security_group_rule" "rds_from_api_server" {
   source_security_group_id = "${lookup(var.api, "api_security_id")}"
 }
 
+resource "aws_security_group_rule" "rds_from_ecs_api_server" {
+  count                    = "${terraform.workspace != "prod" ? 1 : 0}"
+  security_group_id        = "${aws_security_group.rds_cluster.id}"
+  type                     = "ingress"
+  from_port                = "3306"
+  to_port                  = "3306"
+  protocol                 = "tcp"
+  source_security_group_id = "${element(var.ecs_api["ecs_api_security_id"], 0)}"
+}
+
 resource "aws_security_group_rule" "rds_from_api_codebuild" {
   security_group_id        = "${aws_security_group.rds_cluster.id}"
   type                     = "ingress"

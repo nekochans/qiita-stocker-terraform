@@ -24,25 +24,8 @@ resource "aws_security_group_rule" "fargate_api_from_alb" {
   source_security_group_id = "${aws_security_group.fargate_api_alb.id}"
 }
 
-resource "aws_security_group_rule" "rds_from_fargate_api_server" {
-  security_group_id        = "${lookup(var.rds, "rds_security_id")}"
-  type                     = "ingress"
-  from_port                = "3306"
-  to_port                  = "3306"
-  protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.fargate_api.id}"
-}
-
 resource "aws_cloudwatch_log_group" "fargate_api" {
   name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
-}
-
-data "template_file" "user_data" {
-  template = "${file("../../../../modules/aws/fargate/user-data/userdata.sh")}"
-
-  vars {
-    cluster_name = "${aws_ecs_cluster.api_fargate_cluster.name}"
-  }
 }
 
 resource "aws_ecs_cluster" "api_fargate_cluster" {
@@ -50,7 +33,7 @@ resource "aws_ecs_cluster" "api_fargate_cluster" {
 }
 
 data "template_file" "api_fargate_template_file" {
-  template = "${file("../../../../modules/aws/fargate/task/api.json")}"
+  template = "${file("../../../../modules/aws/api/task/fargate-api.json")}"
 
   vars {
     aws_region      = "${lookup(var.fargate, "region")}"

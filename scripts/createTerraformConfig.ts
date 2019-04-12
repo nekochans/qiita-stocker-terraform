@@ -5,9 +5,7 @@ import {
   createApiBackend,
   createFrontendBackend,
   createRdsBackend,
-  createEcrBackend,
-  createEcsBackend,
-  createFargateBackend
+  createEcrBackend
 } from "./createBackend";
 import createProvider from "./createProvider";
 import {
@@ -16,8 +14,7 @@ import {
   createApiTfvars,
   createFrontendTfvars,
   createRdsTfvars,
-  createEcsTfvars,
-  createFargateTfvars
+  createNetworkTfvars
 } from "./createTfvars";
 import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
 
@@ -29,28 +26,26 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
     );
   }
 
-  await createNetworkBackend(deployStage);
-  await createAcmBackend(deployStage);
-  await createBastionBackend(deployStage);
-  await createApiBackend(deployStage);
-  await createFrontendBackend(deployStage);
-  await createRdsBackend(deployStage);
-  await createEcrBackend(deployStage);
-  await createEcsBackend(deployStage);
-  await createFargateBackend(deployStage);
+  await Promise.all([
+    createNetworkBackend(deployStage),
+    createAcmBackend(deployStage),
+    createBastionBackend(deployStage),
+    createApiBackend(deployStage),
+    createFrontendBackend(deployStage),
+    createRdsBackend(deployStage),
+    createEcrBackend(deployStage),
+    createNetworkTfvars(deployStage),
+    createAcmTfvars(deployStage),
+    createBastionTfvars(deployStage),
+    createApiTfvars(deployStage),
+    createFrontendTfvars(deployStage),
+    createRdsTfvars(deployStage)
+  ]);
 
-  const targetDirs = outputPathList();
-  targetDirs.forEach(async (dir: string) => {
-    await createProvider(deployStage, dir);
+  const promises = outputPathList().map((dir: string) => {
+    return createProvider(deployStage, dir);
   });
-
-  await createAcmTfvars(deployStage);
-  await createBastionTfvars(deployStage);
-  await createApiTfvars(deployStage);
-  await createFrontendTfvars(deployStage);
-  await createRdsTfvars(deployStage);
-  await createEcsTfvars(deployStage);
-  await createFargateTfvars(deployStage);
+  await Promise.all(promises);
 
   return Promise.resolve();
 })().catch((error: Error) => {

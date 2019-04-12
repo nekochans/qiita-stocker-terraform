@@ -1,11 +1,9 @@
 resource "aws_ecr_repository" "php" {
-  count = "${terraform.workspace != "prod" ? 1 : 0}"
-  name  = "${terraform.workspace}-api-php"
+  name = "${terraform.workspace}-api-php"
 }
 
 resource "aws_ecr_repository" "nginx" {
-  count = "${terraform.workspace != "prod" ? 1 : 0}"
-  name  = "${terraform.workspace}-api-nginx"
+  name = "${terraform.workspace}-api-nginx"
 }
 
 locals {
@@ -30,13 +28,11 @@ EOF
 }
 
 resource "aws_ecr_lifecycle_policy" "php" {
-  count      = "${terraform.workspace != "prod" ? 1 : 0}"
   repository = "${aws_ecr_repository.php.name}"
   policy     = "${local.lifecycle_policy}"
 }
 
 resource "aws_ecr_lifecycle_policy" "nginx" {
-  count      = "${terraform.workspace != "prod" ? 1 : 0}"
   repository = "${aws_ecr_repository.nginx.name}"
   policy     = "${local.lifecycle_policy}"
 }
