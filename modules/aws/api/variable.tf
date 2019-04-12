@@ -72,3 +72,8 @@ variable "ecr" {
 
   default = {}
 }
+
+variable "rds_local_master_domain_name" {
+  type    = "string"
+  default = ""
+}
