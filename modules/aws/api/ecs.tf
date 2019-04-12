@@ -36,18 +36,9 @@ resource "aws_security_group_rule" "ssh_from_bastion_to_ecs_api" {
   source_security_group_id = "${lookup(var.bastion, "bastion_security_id")}"
 }
 
-resource "aws_security_group_rule" "rds_from_ecs_api_server" {
-  count                    = "${terraform.workspace != "prod" ? 1 : 0}"
-  security_group_id        = "${lookup(var.rds, "rds_security_id")}"
-  type                     = "ingress"
-  from_port                = "3306"
-  to_port                  = "3306"
-  protocol                 = "tcp"
-  source_security_group_id = "${aws_security_group.ecs_api.id}"
-}
-
 data "template_file" "user_data" {
-  template = "${file("../../../../modules/aws/ecs/user-data/userdata.sh")}"
+  count    = "${terraform.workspace != "prod" ? 1 : 0}"
+  template = "${file("../../../../modules/aws/api/user-data/userdata.sh")}"
 
   vars {
     cluster_name = "${aws_ecs_cluster.api_ecs_cluster.name}"
@@ -77,6 +68,12 @@ resource "aws_instance" "ecs_instance" {
   }
 
   user_data = "${data.template_file.user_data.rendered}"
+
+  lifecycle {
+    ignore_changes = [
+      "ebs_block_device",
+    ]
+  }
 }
 
 resource "aws_ecs_cluster" "api_ecs_cluster" {
@@ -85,7 +82,7 @@ resource "aws_ecs_cluster" "api_ecs_cluster" {
 }
 
 data "template_file" "api_template_file" {
-  template = "${file("../../../../modules/aws/ecs/task/api.json")}"
+  template = "${file("../../../../modules/aws/api/task/ecs-api.json")}"
 
   vars {
     php_image_url   = "${element(var.ecr["php_image_url"], 0)}"

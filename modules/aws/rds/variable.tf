@@ -37,3 +37,9 @@ variable "api" {
 
   default = {}
 }
+
+variable "ecs_api" {
+  type = "map"
+
+  default = {}
+}

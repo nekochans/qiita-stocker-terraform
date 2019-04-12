@@ -5,9 +5,7 @@ import {
   createApiBackend,
   createFrontendBackend,
   createRdsBackend,
-  createEcrBackend,
-  createEcsBackend,
-  createFargateBackend
+  createEcrBackend
 } from "./createBackend";
 import createProvider from "./createProvider";
 import {
@@ -16,8 +14,6 @@ import {
   createApiTfvars,
   createFrontendTfvars,
   createRdsTfvars,
-  createEcsTfvars,
-  createFargateTfvars,
   createNetworkTfvars
 } from "./createTfvars";
 import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
@@ -38,16 +34,12 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
     createFrontendBackend(deployStage),
     createRdsBackend(deployStage),
     createEcrBackend(deployStage),
-    createEcsBackend(deployStage),
-    createFargateBackend(deployStage),
     createNetworkTfvars(deployStage),
     createAcmTfvars(deployStage),
     createBastionTfvars(deployStage),
     createApiTfvars(deployStage),
     createFrontendTfvars(deployStage),
-    createRdsTfvars(deployStage),
-    createEcsTfvars(deployStage),
-    createFargateTfvars(deployStage)
+    createRdsTfvars(deployStage)
   ]);
 
   const promises = outputPathList().map((dir: string) => {
