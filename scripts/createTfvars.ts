@@ -69,6 +69,9 @@ export const createApiTfvars = async (deployStage: string): Promise<void> => {
     outputDir: "./providers/aws/environments/21-api/",
     secretIds: secretIds(deployStage),
     outputWhitelist: ["MAIN_DOMAIN_NAME"],
+    addParams: {
+      rds_local_master_domain_name: "qiita-stocker-db"
+    },
     keyMapping: {
       MAIN_DOMAIN_NAME: "main_domain_name"
     }
