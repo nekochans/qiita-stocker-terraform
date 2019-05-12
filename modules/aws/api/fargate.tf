@@ -86,6 +86,7 @@ resource "aws_ecs_service" "api_fargate_service" {
     ignore_changes = [
       "task_definition",
       "load_balancer",
+      "desired_count",
     ]
   }
 
