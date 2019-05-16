@@ -25,7 +25,8 @@ resource "aws_security_group_rule" "fargate_api_from_alb" {
 }
 
 resource "aws_cloudwatch_log_group" "fargate_api" {
-  name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
+  name              = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
+  retention_in_days = 30
 }
 
 resource "aws_ecs_cluster" "api_fargate_cluster" {
