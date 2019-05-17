@@ -76,3 +76,9 @@ resource "aws_iam_policy_attachment" "task_execution_role_attach" {
   roles      = ["${aws_iam_role.task_execution_role.name}"]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
+
+resource "aws_iam_policy_attachment" "task_execution_role_attach_ssm_role" {
+  name       = "ecs-task-role-attach-ssm-role"
+  roles      = ["${aws_iam_role.task_execution_role.name}"]
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+}
