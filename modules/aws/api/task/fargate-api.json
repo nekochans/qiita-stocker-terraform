@@ -11,7 +11,77 @@
         "awslogs-region": "${aws_region}",
         "awslogs-stream-prefix": "ecs"
       }
-    }
+    },
+    "secrets": [
+      {
+        "name": "CORS_ORIGIN",
+        "valueFrom": "${api_cors_origin_arn}"
+      },
+      {
+        "name": "APP_URL",
+        "valueFrom": "${api_app_url_arn}"
+      },
+      {
+        "name": "APP_KEY",
+        "valueFrom": "${api_app_key_arn}"
+      },
+      {
+        "name": "DB_PASSWORD",
+        "valueFrom": "${api_db_password_arn}"
+      },
+      {
+        "name": "NOTIFICATION_SLACK_TOKEN",
+        "valueFrom": "${api_slack_token_arn}"
+      },
+      {
+        "name": "NOTIFICATION_SLACK_CHANNEL",
+        "valueFrom": "${api_slack_channel_arn}"
+      },
+      {
+        "name": "APP_NAME",
+        "valueFrom": "${api_app_name_arn}"
+      },
+      {
+        "name": "APP_ENV",
+        "valueFrom": "${api_app_env_arn}"
+      },
+      {
+        "name": "APP_DEBUG",
+        "valueFrom": "${api_app_debug_arn}"
+      },
+      {
+        "name": "LOG_CHANNEL",
+        "valueFrom": "${api_log_channel_arn}"
+      },
+      {
+        "name": "DB_CONNECTION",
+        "valueFrom": "${api_db_connection_arn}"
+      },
+      {
+        "name": "DB_HOST",
+        "valueFrom": "${api_db_host_arn}"
+      },
+      {
+        "name": "DB_PORT",
+        "valueFrom": "${api_db_port_arn}"
+      },
+      {
+        "name": "DB_DATABASE",
+        "valueFrom": "${api_db_database_arn}"
+      },
+      {
+        "name": "DB_USERNAME",
+        "valueFrom": "${api_db_username_arn}"
+      },
+      {
+        "name": "BROADCAST_DRIVER",
+        "valueFrom": "${api_broadcast_driver_arn}"
+      },
+      {
+        "name": "MAINTENANCE_MODE",
+        "valueFrom": "${api_maintenance_mode_arn}"
+      }
+    ]
   },
   {
     "name": "nginx",

@@ -37,10 +37,27 @@ data "template_file" "api_fargate_template_file" {
   template = "${file("../../../../modules/aws/api/task/fargate-api.json")}"
 
   vars {
-    aws_region      = "${lookup(var.fargate, "region")}"
-    php_image_url   = "${element(var.ecr["php_image_url"], 0)}"
-    nginx_image_url = "${element(var.ecr["nginx_image_url"], 0)}"
-    aws_logs_group  = "${aws_cloudwatch_log_group.fargate_api.name}"
+    aws_region               = "${lookup(var.fargate, "region")}"
+    php_image_url            = "${element(var.ecr["php_image_url"], 0)}"
+    nginx_image_url          = "${element(var.ecr["nginx_image_url"], 0)}"
+    aws_logs_group           = "${aws_cloudwatch_log_group.fargate_api.name}"
+    api_cors_origin_arn      = "${aws_ssm_parameter.api_cors_origin.arn}"
+    api_app_url_arn          = "${aws_ssm_parameter.api_app_url.arn}"
+    api_app_key_arn          = "${aws_ssm_parameter.api_app_key.arn}"
+    api_db_password_arn      = "${aws_ssm_parameter.api_db_password.arn}"
+    api_slack_token_arn      = "${aws_ssm_parameter.api_slack_token.arn}"
+    api_slack_channel_arn    = "${aws_ssm_parameter.api_slack_channel.arn}"
+    api_app_name_arn         = "${aws_ssm_parameter.api_app_name.arn}"
+    api_app_env_arn          = "${aws_ssm_parameter.api_app_env.arn}"
+    api_app_debug_arn        = "${aws_ssm_parameter.api_app_debug.arn}"
+    api_log_channel_arn      = "${aws_ssm_parameter.api_log_channel.arn}"
+    api_db_connection_arn    = "${aws_ssm_parameter.api_db_connection.arn}"
+    api_db_host_arn          = "${aws_ssm_parameter.api_db_host.arn}"
+    api_db_port_arn          = "${aws_ssm_parameter.api_db_port.arn}"
+    api_db_database_arn      = "${aws_ssm_parameter.api_db_database.arn}"
+    api_db_username_arn      = "${aws_ssm_parameter.api_db_username.arn}"
+    api_broadcast_driver_arn = "${aws_ssm_parameter.api_broadcast_driver.arn}"
+    api_maintenance_mode_arn = "${aws_ssm_parameter.api_maintenance_mode.arn}"
   }
 }
 
