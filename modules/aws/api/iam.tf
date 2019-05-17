@@ -53,6 +53,13 @@ resource "aws_iam_role_policy_attachment" "ecs_service_role_attach" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
 }
 
+resource "aws_iam_policy_attachment" "ecs_service_role_attach_ssm_role" {
+  count      = "${terraform.workspace != "prod" ? 1 : 0}"
+  name       = "ecs-service-role-attach-ssm-role"
+  roles      = ["${aws_iam_role.ecs_service_role.name}"]
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+}
+
 data "aws_iam_policy_document" "task_execution_trust_relationship" {
   "statement" {
     effect = "Allow"
