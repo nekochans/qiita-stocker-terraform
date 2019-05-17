@@ -85,8 +85,25 @@ data "template_file" "api_template_file" {
   template = "${file("../../../../modules/aws/api/task/ecs-api.json")}"
 
   vars {
-    php_image_url   = "${element(var.ecr["php_image_url"], 0)}"
-    nginx_image_url = "${element(var.ecr["nginx_image_url"], 0)}"
+    php_image_url            = "${element(var.ecr["php_image_url"], 0)}"
+    nginx_image_url          = "${element(var.ecr["nginx_image_url"], 0)}"
+    api_cors_origin_arn      = "${aws_ssm_parameter.api_cors_origin.arn}"
+    api_app_url_arn          = "${aws_ssm_parameter.api_app_url.arn}"
+    api_app_key_arn          = "${aws_ssm_parameter.api_app_key.arn}"
+    api_db_password_arn      = "${aws_ssm_parameter.api_db_password.arn}"
+    api_slack_token_arn      = "${aws_ssm_parameter.api_slack_token.arn}"
+    api_slack_channel_arn    = "${aws_ssm_parameter.api_slack_channel.arn}"
+    api_app_name_arn         = "${aws_ssm_parameter.api_app_name.arn}"
+    api_app_env_arn          = "${aws_ssm_parameter.api_app_env.arn}"
+    api_app_debug_arn        = "${aws_ssm_parameter.api_app_debug.arn}"
+    api_log_channel_arn      = "${aws_ssm_parameter.api_log_channel.arn}"
+    api_db_connection_arn    = "${aws_ssm_parameter.api_db_connection.arn}"
+    api_db_host_arn          = "${aws_ssm_parameter.api_db_host.arn}"
+    api_db_port_arn          = "${aws_ssm_parameter.api_db_port.arn}"
+    api_db_database_arn      = "${aws_ssm_parameter.api_db_database.arn}"
+    api_db_username_arn      = "${aws_ssm_parameter.api_db_username.arn}"
+    api_broadcast_driver_arn = "${aws_ssm_parameter.api_broadcast_driver.arn}"
+    api_maintenance_mode_arn = "${aws_ssm_parameter.api_maintenance_mode.arn}"
   }
 }
 
@@ -95,6 +112,7 @@ resource "aws_ecs_task_definition" "api" {
   family                = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
   network_mode          = "bridge"
   container_definitions = "${data.template_file.api_template_file.rendered}"
+  execution_role_arn    = "${aws_iam_role.task_execution_role.arn}"
 }
 
 resource "aws_ecs_service" "api_ecs_service" {
