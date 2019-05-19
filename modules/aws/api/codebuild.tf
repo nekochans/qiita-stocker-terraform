@@ -55,11 +55,6 @@ resource "aws_codebuild_project" "api_rds_migration" {
     type         = "LINUX_CONTAINER"
 
     environment_variable {
-      name  = "DEPLOY_STAGE"
-      value = "${terraform.workspace}"
-    }
-
-    environment_variable {
       name  = "CORS_ORIGIN"
       value = "${aws_ssm_parameter.api_cors_origin.name}"
       type  = "PARAMETER_STORE"
