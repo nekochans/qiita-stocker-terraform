@@ -40,6 +40,13 @@ resource "aws_ssm_parameter" "api_slack_channel" {
   overwrite = true
 }
 
+resource "aws_ssm_parameter" "api_datadog_api_key" {
+  name      = "/${terraform.workspace}/qiita-stocker/api/DD_API_KEY"
+  type      = "SecureString"
+  value     = "${data.external.api.result["DATADOG_API_KEY"]}"
+  overwrite = true
+}
+
 resource "aws_ssm_parameter" "api_app_name" {
   name      = "/${terraform.workspace}/qiita-stocker/api/APP_NAME"
   type      = "String"

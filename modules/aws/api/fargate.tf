@@ -58,6 +58,7 @@ data "template_file" "api_fargate_template_file" {
     api_db_username_arn      = "${aws_ssm_parameter.api_db_username.arn}"
     api_broadcast_driver_arn = "${aws_ssm_parameter.api_broadcast_driver.arn}"
     api_maintenance_mode_arn = "${aws_ssm_parameter.api_maintenance_mode.arn}"
+    api_datadog_api_key_arn  = "${aws_ssm_parameter.api_datadog_api_key.arn}"
   }
 }
 
