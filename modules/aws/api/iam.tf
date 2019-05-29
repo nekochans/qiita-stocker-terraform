@@ -80,3 +80,23 @@ resource "aws_iam_role_policy_attachment" "ssm_read_only_access_role_attach" {
   role       = "${aws_iam_role.task_execution_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
 }
+
+data "aws_iam_policy_document" "datadog_agent_container_policy" {
+  "statement" {
+    effect = "Allow"
+
+    actions = [
+      "ecs:ListClusters",
+      "ecs:ListContainerInstances",
+      "ecs:DescribeContainerInstances",
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "ecs_instance" {
+  name   = "${terraform.workspace}-datadog-agent-container-policy"
+  role   = "${aws_iam_role.task_execution_role.id}"
+  policy = "${data.aws_iam_policy_document.datadog_agent_container_policy.json}"
+}
