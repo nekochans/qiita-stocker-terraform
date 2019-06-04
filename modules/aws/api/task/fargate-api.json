@@ -88,6 +88,13 @@
     "image": "${nginx_image_url}",
     "memory": 300,
     "essential": true,
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 65536,
+        "hardLimit": 65536
+      }
+    ],
     "portMappings": [
       {
         "containerPort": 80,
