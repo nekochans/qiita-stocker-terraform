@@ -86,14 +86,14 @@ export const createApiBackend = async (deployStage: string): Promise<void> => {
       {
         name: "bastion",
         bucket: tfstateBucketName(deployStage),
-        key: "env:/${terraform.env}/bastion/terraform.tfstate",
+        key: "env:/${terraform.workspace}/bastion/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
       },
       {
         name: "ecr",
         bucket: tfstateBucketName(deployStage),
-        key: "env:/${terraform.env}/ecr/terraform.tfstate",
+        key: "env:/${terraform.workspace}/ecr/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
       }
@@ -121,7 +121,7 @@ export const createFrontendBackend = async (
       {
         name: "acm",
         bucket: tfstateBucketName(deployStage),
-        key: "env:/${terraform.env}/acm/terraform.tfstate",
+        key: "env:/${terraform.workspace}/acm/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
       }
@@ -148,7 +148,7 @@ export const createRdsBackend = async (deployStage: string): Promise<void> => {
       {
         name: "api",
         bucket: tfstateBucketName(deployStage),
-        key: "env:/${terraform.env}/api/terraform.tfstate",
+        key: "env:/${terraform.workspace}/api/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
       }
@@ -179,7 +179,7 @@ const networkRemoteState = (deployStage: string) => {
   return {
     name: "network",
     bucket: tfstateBucketName(deployStage),
-    key: "env:/${terraform.env}/network/terraform.tfstate",
+    key: "env:/${terraform.workspace}/network/terraform.tfstate",
     region: tfstateBucketRegion(),
     profile: awsProfileName(deployStage)
   };
