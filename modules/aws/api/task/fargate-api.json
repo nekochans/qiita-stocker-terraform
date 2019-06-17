@@ -88,6 +88,13 @@
     "image": "${nginx_image_url}",
     "memory": 300,
     "essential": true,
+    "ulimits": [
+      {
+        "name": "nofile",
+        "softLimit": 65536,
+        "hardLimit": 65536
+      }
+    ],
     "portMappings": [
       {
         "containerPort": 80,
@@ -103,5 +110,24 @@
         "awslogs-stream-prefix": "ecs"
       }
     }
+  },
+  {
+    "name": "datadog-agent",
+    "image": "datadog/agent:latest",
+    "memoryReservation": 256,
+    "essential": true,
+    "cpu": 10,
+    "secrets": [
+      {
+        "name": "DD_API_KEY",
+        "valueFrom": "${api_datadog_api_key_arn}"
+      }
+    ],
+    "environment": [
+      {
+        "name": "ECS_FARGATE",
+        "value": "true"
+      }
+    ]
   }
 ]
