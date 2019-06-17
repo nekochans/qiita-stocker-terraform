@@ -8,7 +8,7 @@
     "createConfig:prod": "DEPLOY_STAGE=prod ts-node scripts/createTerraformConfig.ts"
   },
   "devDependencies": {
-    "@types/node": "^10.12.18",
+    "@types/node": "^12.0.8",
     "prettier": "^1.16.1",
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
@@ -19,6 +19,6 @@
   },
   "dependencies": {
     "@nekonomokochan/aws-env-creator": "^1.3.0",
-    "@nekonomokochan/terraform-config-creator": "^1.0.0"
+    "@nekonomokochan/terraform-config-creator": "^2.0.0"
   }
 }
