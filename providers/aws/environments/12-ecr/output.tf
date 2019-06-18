@@ -1,3 +1,3 @@
 output "ecr" {
-  value = "${module.ecr.ecr}"
+  value = module.ecr.ecr
 }

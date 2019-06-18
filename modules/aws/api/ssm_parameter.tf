@@ -1,49 +1,49 @@
 resource "aws_ssm_parameter" "api_cors_origin" {
   name      = "/${terraform.workspace}/qiita-stocker/api/CORS_ORIGIN"
   type      = "SecureString"
-  value     = "${data.external.api.result["FRONTEND_URL"]}"
+  value     = data.external.api.result["FRONTEND_URL"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "api_app_url" {
   name      = "/${terraform.workspace}/qiita-stocker/api/APP_URL"
   type      = "SecureString"
-  value     = "${data.external.api.result["BACKEND_URL"]}"
+  value     = data.external.api.result["BACKEND_URL"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "api_app_key" {
   name      = "/${terraform.workspace}/qiita-stocker/api/APP_KEY"
   type      = "SecureString"
-  value     = "${data.external.api.result["BACKEND_APP_KEY"]}"
+  value     = data.external.api.result["BACKEND_APP_KEY"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "api_db_password" {
   name      = "/${terraform.workspace}/qiita-stocker/api/DB_PASSWORD"
   type      = "SecureString"
-  value     = "${data.external.api.result["DB_PASSWORD"]}"
+  value     = data.external.api.result["DB_PASSWORD"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "api_slack_token" {
   name      = "/${terraform.workspace}/qiita-stocker/api/NOTIFICATION_SLACK_TOKEN"
   type      = "SecureString"
-  value     = "${data.external.api.result["NOTIFICATION_SLACK_TOKEN"]}"
+  value     = data.external.api.result["NOTIFICATION_SLACK_TOKEN"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "api_slack_channel" {
   name      = "/${terraform.workspace}/qiita-stocker/api/NOTIFICATION_SLACK_CHANNEL"
   type      = "SecureString"
-  value     = "${data.external.api.result["NOTIFICATION_SLACK_CHANNEL"]}"
+  value     = data.external.api.result["NOTIFICATION_SLACK_CHANNEL"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "api_datadog_api_key" {
   name      = "/${terraform.workspace}/qiita-stocker/api/DD_API_KEY"
   type      = "SecureString"
-  value     = "${data.external.api.result["DATADOG_API_KEY"]}"
+  value     = data.external.api.result["DATADOG_API_KEY"]
   overwrite = true
 }
 
@@ -57,7 +57,7 @@ resource "aws_ssm_parameter" "api_app_name" {
 resource "aws_ssm_parameter" "api_app_env" {
   name      = "/${terraform.workspace}/qiita-stocker/api/APP_ENV"
   type      = "String"
-  value     = "${terraform.workspace}"
+  value     = terraform.workspace
   overwrite = true
 }
 

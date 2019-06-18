@@ -1,26 +1,26 @@
 variable "bucket" {
-  type = "string"
+  type = string
 
   default = "qiita-stocker-frontend"
 }
 
 variable "main_domain_name" {
-  type = "string"
+  type = string
 
   default = ""
 }
 
 variable "sub_domain_name" {
-  type = "map"
+  type = map(string)
 
   default = {
-    stg.name     = "stg-www"
-    default.name = "www"
+    "stg.name"     = "stg-www"
+    "default.name" = "www"
   }
 }
 
 variable "acm" {
-  type = "map"
+  type = map(string)
 
   default = {}
 }
