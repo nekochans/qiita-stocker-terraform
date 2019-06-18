@@ -1,14 +1,14 @@
 variable "rds_master_username" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
 variable "rds_master_password" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
 variable "rds_local_master_domain_name" {
-  type    = "string"
+  type    = string
   default = ""
 }

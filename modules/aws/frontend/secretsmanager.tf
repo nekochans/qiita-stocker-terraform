@@ -3,24 +3,24 @@ data "aws_secretsmanager_secret" "frontend" {
 }
 
 data "aws_secretsmanager_secret_version" "frontend" {
-  secret_id = "${data.aws_secretsmanager_secret.frontend.id}"
+  secret_id = data.aws_secretsmanager_secret.frontend.id
 }
 
 data "external" "frontend" {
-  program = ["echo", "${data.aws_secretsmanager_secret_version.frontend.secret_string}"]
+  program = ["echo", data.aws_secretsmanager_secret_version.frontend.secret_string]
 }
 
 data "aws_secretsmanager_secret" "local_frontend" {
-  count = "${terraform.workspace == "stg" ? 1 : 0}"
+  count = terraform.workspace == "stg" ? 1 : 0
   name  = "local/qiita-stocker"
 }
 
 data "aws_secretsmanager_secret_version" "local_frontend" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
-  secret_id = "${data.aws_secretsmanager_secret.local_frontend.id}"
+  count     = terraform.workspace == "stg" ? 1 : 0
+  secret_id = data.aws_secretsmanager_secret.local_frontend[0].id
 }
 
 data "external" "local_frontend" {
-  count   = "${terraform.workspace == "stg" ? 1 : 0}"
-  program = ["echo", "${data.aws_secretsmanager_secret_version.local_frontend.secret_string}"]
+  count   = terraform.workspace == "stg" ? 1 : 0
+  program = ["echo", data.aws_secretsmanager_secret_version.local_frontend[0].secret_string]
 }

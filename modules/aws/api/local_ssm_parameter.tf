@@ -1,53 +1,53 @@
 resource "aws_ssm_parameter" "local_api_cors_origin" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/CORS_ORIGIN"
   type      = "SecureString"
-  value     = "${data.external.local_api.result["FRONTEND_URL"]}"
+  value     = data.external.local_api.0.result["FRONTEND_URL"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "local_api_app_url" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/APP_URL"
   type      = "SecureString"
-  value     = "${data.external.local_api.result["BACKEND_URL"]}"
+  value     = data.external.local_api.0.result["BACKEND_URL"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "local_api_app_key" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/APP_KEY"
   type      = "SecureString"
-  value     = "${data.external.local_api.result["BACKEND_APP_KEY"]}"
+  value     = data.external.local_api.0.result["BACKEND_APP_KEY"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "local_api_db_password" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/DB_PASSWORD"
   type      = "SecureString"
-  value     = "${data.external.local_api.result["DB_PASSWORD"]}"
+  value     = data.external.local_api.0.result["DB_PASSWORD"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "local_api_slack_token" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/NOTIFICATION_SLACK_TOKEN"
   type      = "SecureString"
-  value     = "${data.external.local_api.result["NOTIFICATION_SLACK_TOKEN"]}"
+  value     = data.external.local_api.0.result["NOTIFICATION_SLACK_TOKEN"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "local_api_slack_channel" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/NOTIFICATION_SLACK_CHANNEL"
   type      = "SecureString"
-  value     = "${data.external.local_api.result["NOTIFICATION_SLACK_CHANNEL"]}"
+  value     = data.external.local_api.0.result["NOTIFICATION_SLACK_CHANNEL"]
   overwrite = true
 }
 
 resource "aws_ssm_parameter" "local_api_app_name" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/APP_NAME"
   type      = "String"
   value     = "qiita-stocker-backend"
@@ -55,7 +55,7 @@ resource "aws_ssm_parameter" "local_api_app_name" {
 }
 
 resource "aws_ssm_parameter" "local_api_app_env" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/APP_ENV"
   type      = "String"
   value     = "local"
@@ -63,7 +63,7 @@ resource "aws_ssm_parameter" "local_api_app_env" {
 }
 
 resource "aws_ssm_parameter" "local_api_app_debug" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/APP_DEBUG"
   type      = "String"
   value     = "true"
@@ -71,7 +71,7 @@ resource "aws_ssm_parameter" "local_api_app_debug" {
 }
 
 resource "aws_ssm_parameter" "local_api_log_channel" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/LOG_CHANNEL"
   type      = "String"
   value     = "app"
@@ -79,7 +79,7 @@ resource "aws_ssm_parameter" "local_api_log_channel" {
 }
 
 resource "aws_ssm_parameter" "local_api_db_connection" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/DB_CONNECTION"
   type      = "String"
   value     = "mysql"
@@ -87,7 +87,7 @@ resource "aws_ssm_parameter" "local_api_db_connection" {
 }
 
 resource "aws_ssm_parameter" "local_api_db_host" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/DB_HOST"
   type      = "String"
   value     = "mysql"
@@ -95,7 +95,7 @@ resource "aws_ssm_parameter" "local_api_db_host" {
 }
 
 resource "aws_ssm_parameter" "local_api_db_port" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/DB_PORT"
   type      = "String"
   value     = "3306"
@@ -103,7 +103,7 @@ resource "aws_ssm_parameter" "local_api_db_port" {
 }
 
 resource "aws_ssm_parameter" "local_api_db_database" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/DB_DATABASE"
   type      = "String"
   value     = "qiita_stocker"
@@ -111,7 +111,7 @@ resource "aws_ssm_parameter" "local_api_db_database" {
 }
 
 resource "aws_ssm_parameter" "local_api_db_username" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/DB_USERNAME"
   type      = "String"
   value     = "qiita_stocker"
@@ -119,7 +119,7 @@ resource "aws_ssm_parameter" "local_api_db_username" {
 }
 
 resource "aws_ssm_parameter" "local_api_broadcast_driver" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/BROADCAST_DRIVER"
   type      = "String"
   value     = "log"
@@ -127,7 +127,7 @@ resource "aws_ssm_parameter" "local_api_broadcast_driver" {
 }
 
 resource "aws_ssm_parameter" "local_api_maintenance_mode" {
-  count     = "${terraform.workspace == "stg" ? 1 : 0}"
+  count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/api/MAINTENANCE_MODE"
   type      = "String"
   value     = "false"

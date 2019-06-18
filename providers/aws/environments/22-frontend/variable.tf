@@ -1,5 +1,4 @@
 variable "main_domain_name" {
-  type = "string"
-
+  type    = string
   default = ""
 }

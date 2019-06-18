@@ -13,7 +13,7 @@ const createProvider = async (
     outputPath,
     awsProviderParams: [
       {
-        version: "=2.4.0",
+        version: "=2.15.0",
         region,
         profile: awsProfileName(deployStage)
       }

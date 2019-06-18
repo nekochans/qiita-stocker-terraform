@@ -1,11 +1,23 @@
 // Fargate
 resource "aws_security_group" "fargate_api_alb" {
-  name        = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb"
-  description = "Security Group to ${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb"
-  vpc_id      = "${lookup(var.vpc, "vpc_id")}"
+  name = "${lookup(
+    var.fargate,
+    "${terraform.workspace}.name",
+    var.fargate["default.name"]
+  )}-alb"
+  description = "Security Group to ${lookup(
+    var.fargate,
+    "${terraform.workspace}.name",
+    var.fargate["default.name"]
+  )}-alb"
+  vpc_id = var.vpc["vpc_id"]
 
-  tags {
-    Name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb"
+  tags = {
+    Name = "${lookup(
+      var.fargate,
+      "${terraform.workspace}.name",
+      var.fargate["default.name"]
+    )}-alb"
   }
 
   egress {
@@ -17,7 +29,7 @@ resource "aws_security_group" "fargate_api_alb" {
 }
 
 resource "aws_security_group_rule" "fargate_api_alb" {
-  security_group_id = "${aws_security_group.fargate_api_alb.id}"
+  security_group_id = aws_security_group.fargate_api_alb.id
   type              = "ingress"
   from_port         = 443
   to_port           = 443
@@ -26,50 +38,66 @@ resource "aws_security_group_rule" "fargate_api_alb" {
 }
 
 resource "aws_s3_bucket" "fargate_api_alb_logs" {
-  bucket        = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb-logs"
+  bucket = "${lookup(
+    var.fargate,
+    "${terraform.workspace}.name",
+    var.fargate["default.name"]
+  )}-alb-logs"
   force_destroy = true
 }
 
 data "aws_iam_policy_document" "put_fargate_api_alb_logs_policy" {
-  "statement" {
+  statement {
     actions   = ["s3:PutObject"]
     resources = ["${aws_s3_bucket.fargate_api_alb_logs.arn}/*"]
 
     principals {
       type        = "AWS"
-      identifiers = ["${data.aws_elb_service_account.aws_elb_service_account.id}"]
+      identifiers = [data.aws_elb_service_account.aws_elb_service_account.id]
     }
   }
 }
 
 resource "aws_s3_bucket_policy" "fargate_api" {
-  bucket = "${aws_s3_bucket.fargate_api_alb_logs.id}"
-  policy = "${data.aws_iam_policy_document.put_fargate_api_alb_logs_policy.json}"
+  bucket = aws_s3_bucket.fargate_api_alb_logs.id
+  policy = data.aws_iam_policy_document.put_fargate_api_alb_logs_policy.json
 }
 
 resource "aws_alb" "fargate_alb" {
-  name                       = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}"
+  name = lookup(
+    var.fargate,
+    "${terraform.workspace}.name",
+    var.fargate["default.name"]
+  )
   internal                   = false
   load_balancer_type         = "application"
-  security_groups            = ["${aws_security_group.fargate_api_alb.id}"]
-  subnets                    = ["${var.vpc["subnet_public_1a_id"]}", "${var.vpc["subnet_public_1c_id"]}", "${var.vpc["subnet_public_1d_id"]}"]
+  security_groups            = [aws_security_group.fargate_api_alb.id]
+  subnets                    = [var.vpc["subnet_public_1a_id"], var.vpc["subnet_public_1c_id"], var.vpc["subnet_public_1d_id"]]
   enable_deletion_protection = false
 
   access_logs {
     enabled = true
-    bucket  = "${aws_s3_bucket.fargate_api_alb_logs.bucket}"
+    bucket  = aws_s3_bucket.fargate_api_alb_logs.bucket
   }
 
-  tags {
-    Name = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-alb"
+  tags = {
+    Name = "${lookup(
+      var.fargate,
+      "${terraform.workspace}.name",
+      var.fargate["default.name"]
+    )}-alb"
   }
 }
 
 resource "aws_alb_target_group" "fargate_api_blue" {
-  name     = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-blue"
+  name = "${lookup(
+    var.fargate,
+    "${terraform.workspace}.name",
+    var.fargate["default.name"]
+  )}-blue"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = "${lookup(var.vpc, "vpc_id")}"
+  vpc_id   = var.vpc["vpc_id"]
 
   health_check {
     path                = "/api/statuses"
@@ -84,10 +112,14 @@ resource "aws_alb_target_group" "fargate_api_blue" {
 }
 
 resource "aws_alb_target_group" "fargate_api_green" {
-  name     = "${lookup(var.fargate, "${terraform.env}.name", var.fargate["default.name"])}-green"
+  name = "${lookup(
+    var.fargate,
+    "${terraform.workspace}.name",
+    var.fargate["default.name"]
+  )}-green"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = "${lookup(var.vpc, "vpc_id")}"
+  vpc_id   = var.vpc["vpc_id"]
 
   health_check {
     path                = "/api/statuses"
@@ -102,32 +134,32 @@ resource "aws_alb_target_group" "fargate_api_green" {
 }
 
 resource "aws_alb_listener" "fargate_alb" {
-  load_balancer_arn = "${aws_alb.fargate_alb.id}"
+  load_balancer_arn = aws_alb.fargate_alb.id
   port              = 443
   protocol          = "HTTPS"
 
   ssl_policy      = "ELBSecurityPolicy-2016-08"
-  certificate_arn = "${data.aws_acm_certificate.main.arn}"
+  certificate_arn = data.aws_acm_certificate.main.arn
 
   lifecycle {
-    ignore_changes = ["default_action"]
+    ignore_changes = [default_action]
   }
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.fargate_api_blue.id}"
+    target_group_arn = aws_alb_target_group.fargate_api_blue.id
     type             = "forward"
   }
 }
 
 // ECS
 resource "aws_security_group" "ecs_alb" {
-  count       = "${terraform.workspace != "prod" ? 1 : 0}"
-  name        = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
-  description = "Security Group to ${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
-  vpc_id      = "${lookup(var.vpc, "vpc_id")}"
+  count       = terraform.workspace != "prod" ? 1 : 0
+  name        = "${lookup(var.ecs, "${terraform.workspace}.name", var.ecs["default.name"])}-alb"
+  description = "Security Group to ${lookup(var.ecs, "${terraform.workspace}.name", var.ecs["default.name"])}-alb"
+  vpc_id      = var.vpc["vpc_id"]
 
-  tags {
-    Name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
+  tags = {
+    Name = "${lookup(var.ecs, "${terraform.workspace}.name", var.ecs["default.name"])}-alb"
   }
 
   egress {
@@ -139,8 +171,8 @@ resource "aws_security_group" "ecs_alb" {
 }
 
 resource "aws_security_group_rule" "ecs_alb" {
-  count             = "${terraform.workspace != "prod" ? 1 : 0}"
-  security_group_id = "${aws_security_group.ecs_alb.id}"
+  count             = terraform.workspace != "prod" ? 1 : 0
+  security_group_id = aws_security_group.ecs_alb[0].id
   type              = "ingress"
   from_port         = 443
   to_port           = 443
@@ -149,25 +181,25 @@ resource "aws_security_group_rule" "ecs_alb" {
 }
 
 resource "aws_alb" "ecs_alb" {
-  count                      = "${terraform.workspace != "prod" ? 1 : 0}"
-  name                       = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  count                      = terraform.workspace != "prod" ? 1 : 0
+  name                       = lookup(var.ecs, "${terraform.workspace}.name", var.ecs["default.name"])
   internal                   = false
   load_balancer_type         = "application"
-  security_groups            = ["${aws_security_group.ecs_alb.id}"]
-  subnets                    = ["${var.vpc["subnet_public_1a_id"]}", "${var.vpc["subnet_public_1c_id"]}", "${var.vpc["subnet_public_1d_id"]}"]
+  security_groups            = [aws_security_group.ecs_alb[0].id]
+  subnets                    = [var.vpc["subnet_public_1a_id"], var.vpc["subnet_public_1c_id"], var.vpc["subnet_public_1d_id"]]
   enable_deletion_protection = false
 
-  tags {
-    Name = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}-alb"
+  tags = {
+    Name = "${lookup(var.ecs, "${terraform.workspace}.name", var.ecs["default.name"])}-alb"
   }
 }
 
 resource "aws_alb_target_group" "ecs" {
-  count    = "${terraform.workspace != "prod" ? 1 : 0}"
-  name     = "${lookup(var.ecs, "${terraform.env}.name", var.ecs["default.name"])}"
+  count    = terraform.workspace != "prod" ? 1 : 0
+  name     = lookup(var.ecs, "${terraform.workspace}.name", var.ecs["default.name"])
   port     = 80
   protocol = "HTTP"
-  vpc_id   = "${lookup(var.vpc, "vpc_id")}"
+  vpc_id   = var.vpc["vpc_id"]
 
   health_check {
     path                = "/api/statuses"
@@ -180,16 +212,16 @@ resource "aws_alb_target_group" "ecs" {
 }
 
 resource "aws_alb_listener" "ecs_alb" {
-  count             = "${terraform.workspace != "prod" ? 1 : 0}"
-  load_balancer_arn = "${aws_alb.ecs_alb.id}"
+  count             = terraform.workspace != "prod" ? 1 : 0
+  load_balancer_arn = aws_alb.ecs_alb[0].id
   port              = 443
   protocol          = "HTTPS"
 
   ssl_policy      = "ELBSecurityPolicy-2016-08"
-  certificate_arn = "${data.aws_acm_certificate.main.arn}"
+  certificate_arn = data.aws_acm_certificate.main.arn
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.ecs.id}"
+    target_group_arn = aws_alb_target_group.ecs[0].id
     type             = "forward"
   }
 }

@@ -1,9 +1,9 @@
 module "rds" {
   source                       = "../../../../modules/aws/rds"
-  vpc                          = "${data.terraform_remote_state.network.vpc}"
-  api                          = "${data.terraform_remote_state.api.api}"
-  ecs_api                      = "${data.terraform_remote_state.api.ecs_api}"
-  rds_master_username          = "${var.rds_master_username}"
-  rds_master_password          = "${var.rds_master_password}"
-  rds_local_master_domain_name = "${var.rds_local_master_domain_name}"
+  vpc                          = data.terraform_remote_state.network.outputs.vpc
+  api                          = data.terraform_remote_state.api.outputs.api
+  ecs_api                      = data.terraform_remote_state.api.outputs.ecs_api
+  rds_master_username          = var.rds_master_username
+  rds_master_password          = var.rds_master_password
+  rds_local_master_domain_name = var.rds_local_master_domain_name
 }

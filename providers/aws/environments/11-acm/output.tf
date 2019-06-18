@@ -1,3 +1,3 @@
 output "acm" {
-  value = "${module.acm.acm}"
+  value = module.acm.acm
 }
