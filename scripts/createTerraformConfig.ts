@@ -1,6 +1,7 @@
 import {
   createNetworkBackend,
   createAcmBackend,
+  createIamBackend,
   createBastionBackend,
   createApiBackend,
   createFrontendBackend,
@@ -29,6 +30,7 @@ import { isAllowedDeployStage, outputPathList } from "./terraformConfigUtil";
   await Promise.all([
     createNetworkBackend(deployStage),
     createAcmBackend(deployStage),
+    createIamBackend(deployStage),
     createBastionBackend(deployStage),
     createApiBackend(deployStage),
     createFrontendBackend(deployStage),
