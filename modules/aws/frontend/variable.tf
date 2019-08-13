@@ -16,7 +16,6 @@ variable "api_gateway" {
   default = "qiita-stocker-nuxt"
 }
 
-
 variable "main_domain_name" {
   type = string
 
