@@ -142,6 +142,13 @@ export const createFrontendBackend = async (
         key: "env:/${terraform.workspace}/acm/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
+      },
+      {
+        name: "iam",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.workspace}/iam/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
       }
     ]
   };

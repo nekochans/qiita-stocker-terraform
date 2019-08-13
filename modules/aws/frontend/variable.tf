@@ -37,3 +37,9 @@ variable "acm" {
 
   default = {}
 }
+
+variable "iam" {
+  type = map(string)
+
+  default = {}
+}
