@@ -114,6 +114,13 @@ export const createApiBackend = async (deployStage: string): Promise<void> => {
         key: "env:/${terraform.workspace}/ecr/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
+      },
+      {
+        name: "iam",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.workspace}/iam/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
       }
     ]
   };

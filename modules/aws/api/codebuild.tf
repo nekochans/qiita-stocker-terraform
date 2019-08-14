@@ -1,32 +1,3 @@
-data "aws_iam_policy_document" "codebuild_trust_relationship" {
-  statement {
-    effect = "Allow"
-
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type = "Service"
-
-      identifiers = [
-        "codebuild.amazonaws.com",
-        "codedeploy.amazonaws.com",
-        "secretsmanager.amazonaws.com",
-        "s3.amazonaws.com",
-      ]
-    }
-  }
-}
-
-resource "aws_iam_role" "codebuild_role" {
-  name               = "${terraform.workspace}-codebuild-role"
-  assume_role_policy = data.aws_iam_policy_document.codebuild_trust_relationship.json
-}
-
-resource "aws_iam_role_policy_attachment" "attach_admin_access_to_codebuild_role" {
-  role       = aws_iam_role.codebuild_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
 resource "aws_security_group" "api_codebuild" {
   name        = "${terraform.workspace}-${lookup(var.api, "${terraform.workspace}.name", var.api["default.name"])}-codebuild"
   description = "Security Group to ${lookup(var.api, "${terraform.workspace}.name", var.api["default.name"])} codebuild"
@@ -158,7 +129,7 @@ resource "aws_codebuild_project" "api_rds_migration" {
   }
 
   name         = "${terraform.workspace}-${lookup(var.api, "${terraform.workspace}.name", var.api["default.name"])}-rds-migration"
-  service_role = aws_iam_role.codebuild_role.arn
+  service_role = var.iam["codebuild_role_arn"]
 
   source {
     type            = "GITHUB"
@@ -225,7 +196,7 @@ resource "aws_codebuild_project" "push_to_ecr" {
     "${terraform.workspace}.name",
     var.fargate["default.name"]
   )}-push-ecr"
-  service_role = aws_iam_role.codebuild_role.arn
+  service_role = var.iam["codebuild_role_arn"]
 
   source {
     type                = "GITHUB"
