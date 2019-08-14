@@ -22,6 +22,10 @@ export const acmOutputPath = (): string => {
   return "./providers/aws/environments/11-acm/";
 };
 
+export const iamOutputPath = (): string => {
+  return "./providers/aws/environments/13-iam/";
+};
+
 export const bastionOutputPath = (): string => {
   return "./providers/aws/environments/20-bastion/";
 };
@@ -46,6 +50,7 @@ export const outputPathList = (): string[] => {
   return [
     networkOutputPath(),
     acmOutputPath(),
+    iamOutputPath(),
     bastionOutputPath(),
     apiOutputPath(),
     frontendOutputPath(),
