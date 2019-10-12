@@ -109,6 +109,28 @@ resource "aws_cloudfront_distribution" "nuxt" {
     max_ttl     = 31536000
   }
 
+  ordered_cache_behavior {
+    path_pattern     = "assets/*"
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    compress         = true
+    target_origin_id = "S3-${terraform.workspace}-${var.bucket_nuxt}"
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+
+    min_ttl     = 0
+    default_ttl = 86400
+    max_ttl     = 31536000
+  }
+
   price_class = "PriceClass_All"
 
   custom_error_response {
