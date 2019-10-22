@@ -1,3 +1,7 @@
+data "aws_route53_zone" "web" {
+  name = var.main_domain_name
+}
+
 resource "aws_route53_record" "nuxt" {
   zone_id = data.aws_route53_zone.web.zone_id
   name = lookup(

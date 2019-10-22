@@ -1,9 +1,3 @@
-variable "bucket" {
-  type = string
-
-  default = "qiita-stocker-frontend"
-}
-
 variable "bucket_nuxt" {
   type = string
 
