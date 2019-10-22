@@ -1,4 +1,4 @@
-resource "aws_ssm_parameter" "local_frontend_app_url" {
+resource "aws_ssm_parameter" "local_frontend_api_url_base" {
   count     = terraform.workspace == "stg" ? 1 : 0
   name      = "/local/qiita-stocker/frontend/API_URL_BASE"
   type      = "SecureString"
@@ -43,6 +43,14 @@ resource "aws_ssm_parameter" "local_frontend_google_site_verification" {
   name      = "/local/qiita-stocker/frontend/GOOGLE_SITE_VERIFICATION"
   type      = "SecureString"
   value     = data.external.local_frontend.0.result["GOOGLE_SITE_VERIFICATION"]
+  overwrite = true
+}
+
+resource "aws_ssm_parameter" "local_frontend_frontend_url" {
+  count     = terraform.workspace == "stg" ? 1 : 0
+  name      = "/local/qiita-stocker/frontend/APP_URL"
+  type      = "SecureString"
+  value     = data.external.local_frontend.0.result["FRONTEND_URL"]
   overwrite = true
 }
 

@@ -1,4 +1,4 @@
-resource "aws_ssm_parameter" "frontend_app_url" {
+resource "aws_ssm_parameter" "frontend_api_url_base" {
   name      = "/${terraform.workspace}/qiita-stocker/frontend/API_URL_BASE"
   type      = "SecureString"
   value     = data.external.frontend.result["BACKEND_URL"]
@@ -37,6 +37,13 @@ resource "aws_ssm_parameter" "frontend_google_site_verification" {
   name      = "/${terraform.workspace}/qiita-stocker/frontend/GOOGLE_SITE_VERIFICATION"
   type      = "SecureString"
   value     = data.external.frontend.result["GOOGLE_SITE_VERIFICATION"]
+  overwrite = true
+}
+
+resource "aws_ssm_parameter" "frontend_frontend_url" {
+  name      = "/${terraform.workspace}/qiita-stocker/frontend/APP_URL"
+  type      = "SecureString"
+  value     = data.external.frontend.result["FRONTEND_URL"]
   overwrite = true
 }
 

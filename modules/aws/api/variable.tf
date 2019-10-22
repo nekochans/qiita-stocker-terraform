@@ -79,3 +79,9 @@ variable "rds_local_master_domain_name" {
 
   default = ""
 }
+
+variable "iam" {
+  type = map(string)
+
+  default = {}
+}

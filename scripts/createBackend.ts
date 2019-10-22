@@ -1,6 +1,7 @@
 import { createS3Backend } from "@nekonomokochan/terraform-config-creator";
 import {
   acmOutputPath,
+  iamOutputPath,
   apiOutputPath,
   awsProfileName,
   bastionOutputPath,
@@ -40,6 +41,23 @@ export const createAcmBackend = async (deployStage: string): Promise<void> => {
       backend: {
         bucket: tfstateBucketName(deployStage),
         key: "acm/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      }
+    }
+  };
+
+  await createS3Backend(params);
+};
+
+export const createIamBackend = async (deployStage: string): Promise<void> => {
+  const params = {
+    outputPath: iamOutputPath(),
+    backendParams: {
+      requiredVersion: terraformVersion(),
+      backend: {
+        bucket: tfstateBucketName(deployStage),
+        key: "iam/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
       }
@@ -96,6 +114,13 @@ export const createApiBackend = async (deployStage: string): Promise<void> => {
         key: "env:/${terraform.workspace}/ecr/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
+      },
+      {
+        name: "iam",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.workspace}/iam/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
       }
     ]
   };
@@ -122,6 +147,13 @@ export const createFrontendBackend = async (
         name: "acm",
         bucket: tfstateBucketName(deployStage),
         key: "env:/${terraform.workspace}/acm/terraform.tfstate",
+        region: tfstateBucketRegion(),
+        profile: awsProfileName(deployStage)
+      },
+      {
+        name: "iam",
+        bucket: tfstateBucketName(deployStage),
+        key: "env:/${terraform.workspace}/iam/terraform.tfstate",
         region: tfstateBucketRegion(),
         profile: awsProfileName(deployStage)
       }
