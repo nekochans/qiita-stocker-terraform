@@ -28,7 +28,6 @@ variable "sub_domain_name" {
   default = {
     "stg.name"     = "tmp-stg-www"
     "default.name" = "www"
-    "stg.tmp_name" = "stg-www"
   }
 }
 

@@ -1,18 +1,15 @@
-// TODO 本番デプロイ時にドメインを変更する
 resource "aws_route53_record" "nuxt" {
-  count = terraform.workspace == "stg" ? 1 : 0
-
   zone_id = data.aws_route53_zone.web.zone_id
   name = lookup(
     var.sub_domain_name,
-    "${terraform.workspace}.tmp_name",
+    "${terraform.workspace}.name",
     var.sub_domain_name["default.name"]
   )
   type = "A"
 
   alias {
-    name                   = aws_cloudfront_distribution.web.domain_name
-    zone_id                = aws_cloudfront_distribution.web.hosted_zone_id
+    name                   = aws_cloudfront_distribution.nuxt.domain_name
+    zone_id                = aws_cloudfront_distribution.nuxt.hosted_zone_id
     evaluate_target_health = false
   }
 }
@@ -23,14 +20,12 @@ data "aws_api_gateway_rest_api" "nuxt" {
 }
 
 resource "aws_cloudfront_distribution" "nuxt" {
-  count = terraform.workspace == "stg" ? 1 : 0
-
   origin {
-    domain_name = aws_s3_bucket.nuxt[count.index].bucket_regional_domain_name
+    domain_name = aws_s3_bucket.nuxt.bucket_regional_domain_name
     origin_id   = "S3-${terraform.workspace}-${var.bucket_nuxt}"
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.nuxt_origin_access_identity[count.index].cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.nuxt_origin_access_identity.cloudfront_access_identity_path
     }
   }
 
@@ -59,10 +54,9 @@ resource "aws_cloudfront_distribution" "nuxt" {
   enabled         = true
   is_ipv6_enabled = true
 
-  // TODO 本番デプロイ時にドメインを変更する
   aliases = ["${lookup(
     var.sub_domain_name,
-    "${terraform.workspace}.tmp_name",
+    "${terraform.workspace}.name",
     var.sub_domain_name["default.name"]
   )}.${var.main_domain_name}"]
 
@@ -156,7 +150,7 @@ resource "aws_cloudfront_distribution" "nuxt" {
 
   logging_config {
     include_cookies = true
-    bucket          = aws_s3_bucket.nuxt_access_logs[count.index].bucket_domain_name
+    bucket          = aws_s3_bucket.nuxt_access_logs.bucket_domain_name
     prefix          = "raw/"
   }
 }
