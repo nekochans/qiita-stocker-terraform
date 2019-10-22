@@ -1,6 +1,4 @@
 resource "aws_codebuild_project" "frontend" {
-  count = terraform.workspace == "stg" ? 1 : 0
-
   artifacts {
     type = "NO_ARTIFACTS"
   }
@@ -17,7 +15,7 @@ resource "aws_codebuild_project" "frontend" {
 
     environment_variable {
       name  = "DISTRIBUTION_ID"
-      value = aws_cloudfront_distribution.nuxt[count.index].id
+      value = aws_cloudfront_distribution.nuxt.id
     }
 
     environment_variable {

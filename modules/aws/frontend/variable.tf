@@ -1,9 +1,3 @@
-variable "bucket" {
-  type = string
-
-  default = "qiita-stocker-frontend"
-}
-
 variable "bucket_nuxt" {
   type = string
 
@@ -28,7 +22,6 @@ variable "sub_domain_name" {
   default = {
     "stg.name"     = "tmp-stg-www"
     "default.name" = "www"
-    "stg.tmp_name" = "stg-www"
   }
 }
 
