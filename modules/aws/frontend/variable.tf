@@ -20,7 +20,7 @@ variable "sub_domain_name" {
   type = map(string)
 
   default = {
-    "stg.name"     = "tmp-stg-www"
+    "stg.name"     = "stg-www"
     "default.name" = "www"
   }
 }
