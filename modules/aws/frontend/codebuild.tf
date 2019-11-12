@@ -60,7 +60,7 @@ resource "aws_codebuild_project" "frontend" {
 
   source {
     type                = "GITHUB"
-    location            = "https://github.com/nekochans/qiita-stocker-nuxt.git"
+    location            = "https://github.com/nekochans/qiita-stocker-frontend.git"
     git_clone_depth     = 1
     buildspec           = "buildspec.yml"
     report_build_status = true
