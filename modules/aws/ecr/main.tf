@@ -29,10 +29,10 @@ EOF
 
 resource "aws_ecr_lifecycle_policy" "php" {
   repository = aws_ecr_repository.php.name
-  policy = local.lifecycle_policy
+  policy     = local.lifecycle_policy
 }
 
 resource "aws_ecr_lifecycle_policy" "nginx" {
   repository = aws_ecr_repository.nginx.name
-  policy = local.lifecycle_policy
+  policy     = local.lifecycle_policy
 }
